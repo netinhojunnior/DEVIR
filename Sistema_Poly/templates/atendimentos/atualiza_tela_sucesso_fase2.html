@@ -1,0 +1,99 @@
+{% load static %}
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro da Fase 2 - Sucesso</title>
+    <link rel="stylesheet" href="{% static 'atendimentos/styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #4CAF50;
+        }
+
+        .success-message {
+            background-color: #dff0d8;
+            color: #3c763d;
+            border: 1px solid #d6e9c6;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+
+        .button-container {
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+
+        .btn-primary {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #45a049;
+        }
+
+        .btn-secondary {
+            background-color: #f0ad4e;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #ec971f;
+        }
+
+        .btn-back {
+            background-color: #337ab7;
+            color: white;
+        }
+
+        .btn-back:hover {
+            background-color: #286090;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Cadastro da Fase 2 - Sucesso!</h1>
+
+    <div class="success-message">
+        <p>Os dados da Fase 2 foram atualizados com sucesso!</p>
+    </div>
+
+    <div class="button-container">
+        <a href="{% url 'Sistema_Poly:menu' %}" class="btn btn-primary">
+            <i class="fas fa-home"></i> Voltar ao Menu Principal
+        </a>
+
+        <a href="{% url 'Sistema_Poly:sub_menu' %}?option=realizar_atendimento" class="btn btn-secondary">
+            <i class="fas fa-list-alt"></i> Voltar ao Menu de Atendimento
+        </a>
+
+        <a href="{% url 'Sistema_Poly:busca_protocolos' %}" class="btn btn-primary">
+            <i class="fas fa-search"></i> Ver Casos
+        </a>
+
+        <a href="{% url 'Sistema_Poly:iniciar_fase3' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-right"></i> Iniciar Atendimento da Fase 3
+        </a>
+    </div>
+
+</body>
+</html>

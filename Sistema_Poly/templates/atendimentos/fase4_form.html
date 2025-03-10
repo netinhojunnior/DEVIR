@@ -1,0 +1,341 @@
+{% load static %}
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Fase 4</title>
+    <link rel="stylesheet" href="{% static 'atendimentos/styles.css' %}">
+    <!-- Font Awesome para os ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-image: url("{% static 'atendimentos/POLY.png' %}"); /* Imagem de fundo */
+            background-size: cover; /* A imagem ocupa toda a tela */
+            background-position: center; /* Centraliza a imagem */
+            background-attachment: fixed; /* A imagem não se move ao rolar */
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between; /* Justifica os itens ao longo da linha */
+            align-items: center;
+        }
+
+        .form-group label {
+            width: 250px; /* Largura fixa para os labels */
+            text-align: left; /* Alinha as perguntas à esquerda */
+            font-weight: bold; /* Letras das perguntas em negrito */
+        }
+
+        .form-group .field {
+            flex: 1; /* O campo ocupa o restante do espaço disponível */
+            text-align: right; /* Alinha os campos de entrada à direita */
+        }
+
+        /* Transparência nos campos de resposta */
+        .form-group .field input,
+        .form-group .field select,
+        .form-group .field textarea {
+            background-color: rgba(255, 255, 255, 0.5); /* Transparência nos campos de resposta */
+            border: 1px solid #ccc;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 14px;
+            width: 100%;
+            box-sizing: border-box; /* Garante que o padding não altere a largura */
+            color: #333;
+        }
+
+        .form-group .field input:focus,
+        .form-group .field select:focus,
+        .form-group .field textarea:focus {
+            background-color: rgba(255, 255, 255, 1); /* Remove a transparência ao focar */
+            border-color: #4CAF50; /* Cor do foco */
+            outline: none;
+        }
+
+        .submit-btn {
+            padding: 10px 20px;
+            background-color: #4CAF50; /* Cor original dos botões */
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .submit-btn:hover {
+            background-color: #45a049; /* Cor ao passar o mouse */
+        }
+
+        /* Estilos para os botões fora do container */
+        .action-buttons {
+            position: fixed;
+            top: 50%;  /* Centraliza verticalmente na tela */
+            right: 70px; /* Ajuste a distância do botão à direita */
+            transform: translateY(-50%); /* Centraliza o botão verticalmente */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        /* Estilo para todos os botões fora do container (mesma cor e animação) */
+        .action-buttons a, .action-buttons button {
+            background-color: #007bff; /* Cor de fundo dos botões */
+            color: white; /* Cor do texto padrão (branco) */
+            border: none;
+            padding: 12px 0;  /* Tamanho fixo vertical */
+            width: 200px;     /* Largura fixa */
+            margin: 10px 0;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 15px; /* Bordas arredondadas */
+            transition: background-color 0.3s, transform 0.3s; /* Animação suave */
+            text-align: center;  /* Garante o texto centralizado */
+            display: inline-block; /* Garante que o link tenha o mesmo comportamento de um botão */
+            line-height: 1.5; /* Controla a altura do texto dentro do botão */
+        }
+
+        /* Cor de fundo ao passar o mouse */
+        .action-buttons a:hover, .action-buttons button:hover {
+            background-color: #0056b3; /* Cor de fundo ao passar o mouse */
+            transform: scale(1.05); /* Aumenta o botão ligeiramente ao passar o mouse */
+        }
+
+        /* Remover sublinhado dos links (para os títulos dos botões fora do container) */
+        .action-buttons a {
+            text-decoration: none; /* Remove o sublinhado dos links */
+        }
+
+        /* Botões no canto superior esquerdo */
+        .button-container {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            display: flex;            /* Flex para alinhar os botões lado a lado */
+            flex-direction: row;      /* Coloca os botões em linha */
+            gap: 10px;                /* Espaçamento entre os botões */
+        }
+
+        .button-container a {
+            background-color: #007bff; /* Cor do fundo dos botões */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 8px; /* Bordas arredondadas */
+            transition: background-color 0.3s, transform 0.3s; /* Animação suave */
+            text-align: center;
+            display: inline-block;
+            line-height: 1.5;
+        }
+
+        .button-container a:hover {
+            background-color: #0056b3; /* Cor de fundo ao passar o mouse */
+            transform: scale(1.05); /* Aumenta o tamanho ao passar o mouse */
+        }
+
+        .button-container i {
+            margin-right: 8px; /* Espaçamento entre o ícone e o texto */
+        }
+
+        /* Remove sublinhado dos links */
+        .button-container a {
+            text-decoration: none; /* Remove o sublinhado */
+        }
+
+        /* Estilo do .container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.2); /* Cor de fundo com transparência */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+            color: black; /* Cor do texto */
+        }
+
+        /* Título do container */
+        h1 {
+            text-align: center;
+            color: #333; /* Cor do título */
+            margin-bottom: 20px;
+            font-weight: bold; /* Negrito para o título */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cadastrar Fase 4</h1>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Pergunta: Número do Protocolo -->
+            <div class="form-group">
+                <label for="protocolo">Número do Protocolo DEVIR</label>
+                <div class="field">
+                    <input type="text" id="protocolo" name="protocolo" placeholder="0000/0000000000-0" oninput="mascaraProtocolo(this)" maxlength="17" required>
+                </div>
+            </div>
+
+            <!-- Pergunta: Data e Hora do Atendimento -->
+            <div class="form-group">
+                <label for="data_atendimento_fase4">Data e Hora do Atendimento Fase 4</label>
+                <div class="field">
+                    <input type="datetime-local" id="data_atendimento_fase4" name="data_atendimento_fase4" required>
+                </div>
+            </div>
+
+            <!-- Pergunta: Policial Responsável pela Finalização -->
+            <div class="form-group">
+                <label for="policial_finalizacao_fase4">Policial Responsável pela Finalização da Fase 4</label>
+                <div class="field">
+                    <select name="policial_finalizacao_fase4" id="policial_finalizacao_fase4" required>
+                        <option value="" selected>Selecione</option>
+                        <option value="MARIA NAZARÉ">MARIA NAZARÉ</option>
+                        <option value="DANIELLA PORTO">DANIELLA PORTO</option>
+                        <option value="PAULA TIMBÓ">PAULA TIMBÓ</option>
+                        <option value="THAYSA ALBUQUERQUE">THAYSA ALBUQUERQUE</option>
+                        <option value="YASMIM CRISTINA">YASMIM CRISTINA</option>
+                        <option value="AMANDA NASCIMENTO">AMANDA NASCIMENTO</option>
+                        <option value="PAULA WILTSHIRE">PAULA WILTSHIRE</option>
+                        <option value="CARINA QUEIROZ">CARINA QUEIROZ</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Pergunta: Representou Criminalmente -->
+            <div class="form-group">
+                <label for="representou_crime">A vítima Representou Criminalmente?</label>
+                <div class="field">
+                    <select name="representou_crime" id="representou_crime" required>
+                        <option value="" selected>Selecione</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                        <option value="Ação Incondicionada">Ação Incondicionada</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Pergunta: A vítima já sofreu agressões de outro agressor? -->
+            <div class="form-group">
+                <label for="agressao">A vítima já Sofreu Agressões de Outro Agressor?</label>
+                <div class="field">
+                    <select name="agressao" id="agressao" required>
+                        <option value="" selected>Selecione</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                        <option value="Prejudicado">Prejudicado</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Pergunta: Situação da MPU -->
+            <div class="form-group">
+                <label for="situacao_mpu">Situação da MPU</label>
+                <div class="field">
+                    <select name="situacao_mpu" id="situacao_mpu" required>
+                        <option value="" selected>Selecione</option>
+                        <option value="Deferida">Deferida</option>
+                        <option value="Indeferida">Indeferida</option>
+                        <option value="Não Enviada ao TJ">Não Enviada ao TJ</option>
+                        <option value="Declarou-se Incompetente">Declarou-se Incompetente</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Pergunta: Data da Concessão da MPU -->
+            <div class="form-group">
+                <label for="data_concessao_mpu">Data da Concessão da MPU</label>
+                <div class="field">
+                    <input type="date" id="data_concessao_mpu" name="data_concessao_mpu" required>
+                </div>
+            </div>
+
+            <!-- Pergunta: MPU foi Enviado ao TJ? -->
+            <div class="form-group">
+                <label for="mpu_enviado_ao_tj">MPU foi Enviado ao TJ?</label>
+                <div class="field">
+                    <select name="mpu_enviado_ao_tj" id="mpu_enviado_ao_tj" required>
+                        <option value="" selected>Selecione</option>
+                        <option value="Sem Vídeo">Sem Vídeo</option>
+                        <option value="Com Vídeo">Com Vídeo</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Pergunta: Número do Processo de Proteção -->
+            <div class="form-group">
+                <label for="numero_processo_protecao">Número do Processo Proteção e Nº do Protocolo</label>
+                <div class="field">
+                    <input type="text" id="numero_processo_protecao" name="numero_processo_protecao" placeholder="Número do Processo" required>
+                </div>
+            </div>
+
+            <!-- Pergunta: Observações -->
+            <div class="form-group">
+                <label for="observacoes">Observações</label>
+                <div class="field">
+                    <textarea id="observacoes" name="observacoes" placeholder="Observações" required></textarea>
+                </div>
+            </div>
+
+            <!-- Pergunta: Status da Fase 4 -->
+            <div class="form-group">
+                <label for="status_fase">Status da Fase 4</label>
+                <div class="field">
+                    <select name="status_fase" id="status_fase" required>
+                        <option value="" selected>Selecione</option>
+                        <option value="Em Andamento">Em Andamento</option>
+                        <option value="Concluída">Concluída</option>
+                        <option value="Desistência na Fase 4">Desistência na Fase 4</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Botão de Envio -->
+            <div class="form-group">
+                <button type="submit" class="submit-btn">Cadastrar Fase 4</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Botões fora do container -->
+    <div class="action-buttons">
+        <a href="https://www.tjse.jus.br/controleacesso/paginas/loginTJSE.tjse" target="_blank" class="button-link">Consultar Situação da MPU</a>
+    </div>
+
+    <!-- Botões de menu -->
+    <div class="button-container">
+        <!-- Botão para voltar ao menu principal -->
+        <a href="{% url 'Sistema_Poly:menu' %}" class="home-link">
+            <i class="fas fa-home"></i>
+        </a>
+
+        <!-- Botão para voltar ao menu de atendimento -->
+        <a href="{% url 'Sistema_Poly:sub_menu' %}?option=realizar_atendimento" class="home-link">
+            <i class="fas fa-list-alt"></i>
+        </a>
+    </div>
+
+    <script>
+        // Função que aplica a máscara ao campo de texto do protocolo
+        function mascaraProtocolo(input) {
+            var value = input.value.replace(/\D/g, '');  // Remove tudo que não for número
+            // Aplica a máscara (formatando como 0000/0000000000-0)
+            input.value = value.replace(/^(\d{4})(\d{10})(\d{1})$/, '$1/$2-$3');
+        }
+
+        // Aplique a máscara ao carregar a página (caso o campo já tenha valor)
+        window.onload = function() {
+            var input = document.getElementById("protocolo_fase4");
+            if (input) {
+                mascaraProtocolo(input);  // Aplica a máscara ao carregar a página
+            }
+        }
+    </script>
+</body>
+</html>

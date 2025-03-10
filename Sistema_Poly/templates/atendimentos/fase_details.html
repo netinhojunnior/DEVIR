@@ -1,0 +1,20 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+  <h2>Detalhes das Fases</h2>
+
+  <!-- Exibindo cada pergunta e valor como um card -->
+  <div class="fase-cards">
+    {% for pergunta, valor in perguntas|zip(detalhes) %}
+      <div class="card">
+        <div class="card-header">
+          <strong>{{ pergunta }}</strong>
+        </div>
+        <div class="card-body">
+          <p>{{ valor }}</p>
+          <a href="{% url 'fase_details' protocolo=fase.protocolo fase=fase|lower %}" class="btn btn-primary">Ver Detalhes</a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

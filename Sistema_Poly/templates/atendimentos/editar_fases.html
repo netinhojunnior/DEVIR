@@ -1,0 +1,230 @@
+{% load static %}
+
+<!-- Formulário para buscar o protocolo -->
+<div class="search-container">
+    <form method="GET" action="{% url 'Sistema_Poly:editar_fases' %}">
+        {% csrf_token %}
+        <h2>Buscar Caso pelo Protocolo</h2>
+        <div class="form-group">
+            <label for="protocolo">Protocolo:</label>
+            <div class="field">
+                <input type="text" id="protocolo" name="protocolo" placeholder="Digite o número do protocolo" required>
+            </div>
+        </div>
+
+        <button type="submit" class="submit-btn">Buscar</button>
+    </form>
+</div>
+
+{% if protocolo %}
+    <!-- Exibição de mensagens de feedback -->
+    {% if status %}
+        <div class="alert {% if status == 'success' %}alert-success{% else %}alert-error{% endif %}">
+            {% if status == 'success' %}
+                Alterações salvas com sucesso!
+            {% else %}
+                Ocorreu um erro: {{ status }}
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <!-- Formulário para editar as fases com as perguntas -->
+    <form method="POST" action="{% url 'Sistema_Poly:editar_fases' %}?protocolo={{ protocolo }}">
+        {% csrf_token %}
+
+        <!-- Cabeçalho com as abas -->
+        <div class="tabs">
+            <div class="tab" id="fase1-tab" onclick="showTab(1)">Fase 1</div>
+            <div class="tab" id="fase2-tab" onclick="showTab(2)">Fase 2</div>
+            <div class="tab" id="fase3-tab" onclick="showTab(3)">Fase 3</div>
+            <div class="tab" id="fase4-tab" onclick="showTab(4)">Fase 4</div>
+        </div>
+
+        <!-- Conteúdo das abas -->
+        <div id="fase1" class="tab-content">
+            <h3>Fase 1</h3>
+            {{ fase1_form.as_p }}
+            <button type="submit" name="fase" value="1" class="submit-btn">Salvar Alterações da Fase 1</button>
+        </div>
+
+        <div id="fase2" class="tab-content">
+            <h3>Fase 2</h3>
+            {{ fase2_form.as_p }}
+            <button type="submit" name="fase" value="2" class="submit-btn">Salvar Alterações da Fase 2</button>
+        </div>
+
+        <div id="fase3" class="tab-content">
+            <h3>Fase 3</h3>
+            {{ fase3_form.as_p }}
+            <button type="submit" name="fase" value="3" class="submit-btn">Salvar Alterações da Fase 3</button>
+        </div>
+
+        <div id="fase4" class="tab-content">
+            <h3>Fase 4</h3>
+            {{ fase4_form.as_p }}
+            <button type="submit" name="fase" value="4" class="submit-btn">Salvar Alterações da Fase 4</button>
+        </div>
+
+    </form>
+{% endif %}
+
+<script>
+    // Função para exibir/ocultar as abas
+    function showTab(fase) {
+        // Ocultar todas as abas
+        document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
+        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+
+        // Exibir a aba clicada
+        document.getElementById('fase' + fase).style.display = 'block';
+        document.getElementById('fase' + fase + '-tab').classList.add('active');
+    }
+
+    // Exibir a primeira aba por padrão
+    showTab(1);
+</script>
+
+<style>
+    /* Estilo geral */
+    body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background-color: #f4f4f4;
+    }
+
+    /* Container para o campo de busca */
+    .search-container {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .form-group label {
+        width: 250px;
+        text-align: left;
+        font-size: 1.2rem;
+    }
+
+    .form-group .field {
+        flex: 1;
+        text-align: right;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 8px;
+        font-size: 1rem;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    /* Estilo das abas */
+    .tabs {
+        display: flex;
+        margin-bottom: 20px;
+        justify-content: space-around;
+        margin-top: 30px;
+    }
+
+    .tab {
+        padding: 10px 50px;  /* Aumentado o comprimento, diminuindo a altura */
+        background-color: #007BFF;
+        color: white;
+        cursor: pointer;
+        text-align: center;
+        border-radius: 10px;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .tab:hover {
+        background-color: #0056b3;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        transform: translateY(-5px);
+    }
+
+    .tab.active {
+        background-color: #0056b3;
+        transform: scale(1.05);
+    }
+
+    /* Conteúdo das abas */
+    .tab-content {
+        display: none;
+        margin-bottom: 20px;
+    }
+
+    .tab-content h3 {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+    }
+
+    /* Estilo para os campos do formulário */
+    .tab-content label {
+        font-size: 1rem;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .tab-content input, .tab-content select, .tab-content textarea {
+        width: 100%;
+        padding: 10px;
+        font-size: 1rem;
+        margin-bottom: 15px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    /* Estilo dos botões de fase */
+    .submit-btn {
+        padding: 12px 30px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-size: 18px;
+        width: 100%;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .submit-btn:hover {
+        background-color: #45a049;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Estilos para as mensagens de sucesso ou erro */
+    .alert {
+        padding: 10px 20px;
+        margin: 20px 0;
+        border-radius: 5px;
+        text-align: center;
+        font-size: 1.1rem;
+        font-weight: bold;
+    }
+
+    .alert-success {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .alert-error {
+        background-color: #dc3545;
+        color: white;
+    }
+</style>

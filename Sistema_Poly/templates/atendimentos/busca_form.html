@@ -1,0 +1,614 @@
+{% load static %}
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Busca de Casos - Kanban</title>
+    <link rel="stylesheet" href="{% static 'atendimentos/styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome -->
+    <style>
+        /* Estilos básicos (mantido do seu código) */
+        body {
+            font-family: 'Arial', sans-serif;
+            padding: 20px;
+            background: url("{% static 'atendimentos/POLY.png' %}") no-repeat center center fixed;
+            background-size: cover;
+            background-position: top center;
+            color: #333;
+            position: relative;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: -1;
+        }
+
+        /* Estilo para o botão de voltar */
+        .back-link {
+            position: absolute;  /* Para posicionar no canto superior direito */
+            top: 20px;  /* Distância do topo */
+            right: 20px;  /* Distância da direita */
+            z-index: 100; /* Garantir que fique acima de outros elementos */
+        }
+
+        .back-link-icon {
+            font-size: 30px;  /* Tamanho maior do ícone */
+            color: black;  /* Cor inicial do ícone */
+            text-decoration: none;  /* Remover sublinhado */
+            transition: color 0.3s ease;  /* Transição suave para a cor ao passar o mouse */
+        }
+
+        .back-link-icon:hover {
+            color: white;  /* Cor branca ao passar o mouse */
+        }
+
+        .back-link-icon i {
+            margin-right: 5px;  /* Espaçamento entre o ícone e o texto */
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #000000;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #000000;
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        /* Estilo para o container Kanban */
+        .kanban-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .kanban-column {
+            width: 23%;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            height: 500px;
+            overflow-y: auto;
+        }
+
+        .kanban-column h3 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        /* Remover sublinhado dos links */
+        .card-link {
+            display: block;
+            text-decoration: none; /* Remove sublinhado */
+            color: inherit; /* Mantém a cor do texto como no card */
+        }
+
+        /* Estilo para o Card */
+        .card {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+            transition: all 0.3s ease; /* Animação suave de transição */
+        }
+
+        /* Efeito de hover no card */
+        .card-link:hover .card {
+            background-color: rgba(0, 0, 0, 0.1); /* Efeito de escurecimento ao passar o mouse */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Adiciona sombra no hover */
+        }
+
+        /* Efeito de hover no card header */
+        .card-link:hover .card-header {
+            color: #1E4F81; /* Muda a cor do texto quando o card é clicado */
+            transform: translateY(-2px); /* Levanta levemente o card no hover */
+        }
+
+        /* Estilo para o cabeçalho do card */
+        .card-header {
+            font-size: 16px;
+            font-weight: bold;
+            color: #1E4F81;
+        }
+
+        /* Detalhes do protocolo no card */
+        .protocol-details {
+            font-size: 14px;
+            color: #555;
+        }
+
+        /* Botão de visualizar detalhes */
+        .view-btn-container {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .view-btn {
+            padding: 8px 16px;
+            background-color: #1E4F81;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 5px;
+        }
+
+        .view-btn:hover {
+            background-color: #174C73;
+        }
+
+        .no-results {
+            text-align: center;
+            font-size: 18px;
+            color: #888;
+        }
+
+        .submit-btn {
+            padding: 12px 24px;
+            background-color: #1E4F81;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 5px;
+            background-color: rgba(30, 79, 129, 0.8); /* Transparência para o botão */
+        }
+
+        .submit-btn:hover {
+            background-color: rgba(23, 76, 115, 0.8); /* Transparência para o botão */
+        }
+
+        /* Campos de entrada e selects com transparência */
+        select, input[type="text"] {
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.5); /* Transparência nos campos */
+        }
+
+        select:focus, input[type="text"]:focus {
+            border-color: #1E4F81;
+            outline: none;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .form-group label {
+            width: 250px;
+            text-align: left;
+            font-size: 18px;
+            color: #000000;
+            font-weight: bold;
+        }
+
+        /* Opcional: animação suave no hover */
+        .card {
+            transition: all 0.3s ease; /* Animação suave de transição */
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Busca de Casos</h1>
+
+    <!-- Link de Voltar ao Menu Principal -->
+    <div class="back-link">
+        <a href="{% url 'Sistema_Poly:menu' %}" class="back-link-icon">
+            <i class="fas fa-home"></i> <!-- Ícone de casa (Font Awesome) -->
+        </a>
+    </div>
+
+    <!-- Formulário de Busca -->
+    <form method="GET" action="{% url 'Sistema_Poly:busca_protocolos' %}">
+        <div class="form-group">
+            <label for="protocolo">Número do Protocolo:</label>
+            <input type="text" name="protocolo" id="protocolo" value="{{ request.GET.protocolo }}">
+        </div>
+
+        <div class="form-group">
+            <label for="nome_vitima">Nome da Vítima:</label>
+            <input type="text" name="nome_vitima" id="nome_vitima" value="{{ request.GET.nome_vitima }}">
+        </div>
+
+        <div class="form-group">
+            <label for="status_fase">Status da Fase:</label>
+            <select name="status_fase" id="status_fase">
+                <option value="">Selecione</option>
+                <option value="Concluída" {% if request.GET.status_fase == 'Concluída' %}selected{% endif %}>✅ Concluída</option>
+                <option value="Em Andamento" {% if request.GET.status_fase == 'Em Andamento' %}selected{% endif %}>⏳ Em Andamento</option>
+                <option value="Desistência na Fase 1" {% if request.GET.status_fase == 'Desistência na Fase 1' %}selected{% endif %}>❌ Desistência na Fase 1</option>
+                <option value="Desistência na Fase 2" {% if request.GET.status_fase == 'Desistência na Fase 2' %}selected{% endif %}>❌ Desistência na Fase 2</option>
+                <option value="Desistência na Fase 3" {% if request.GET.status_fase == 'Desistência na Fase 3' %}selected{% endif %}>❌ Desistência na Fase 3</option>
+                <option value="Desistência na Fase 4" {% if request.GET.status_fase == 'Desistência na Fase 4' %}selected{% endif %}>❌ Desistência na Fase 4</option>
+                <option value="Falta de contato com a vítima" {% if request.GET.status_fase == 'Falta de contato com a vítima' %}selected{% endif %}>📞 Falta de contato com a vítima</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="fase">Fase:</label>
+            <select name="fase" id="fase">
+                <option value="">Selecione</option>
+                <option value="Fase 1" {% if request.GET.fase == 'Fase 1' %}selected{% endif %}>Fase 1</option>
+                <option value="Fase 2" {% if request.GET.fase == 'Fase 2' %}selected{% endif %}>Fase 2</option>
+                <option value="Fase 3" {% if request.GET.fase == 'Fase 3' %}selected{% endif %}>Fase 3</option>
+                <option value="Fase 4" {% if request.GET.fase == 'Fase 4' %}selected{% endif %}>Fase 4</option>
+            </select>
+        </div>
+
+        <button type="submit" class="submit-btn">Buscar 🔍</button>
+    </form>
+
+    <!-- Kanban Container para cada Fase -->
+    {% if resultados %}
+        <!-- Fase 1 -->
+        <h2>Fase 1</h2>
+
+        <div class="kanban-container">
+            <!-- Container: Casos em Andamento (Fase 1) -->
+            <div class="kanban-column">
+                <h3>⏳ Em Andamento</h3>
+                {% for resultado in resultados %}
+                    {% if resultado.4 == "Fase 1" and resultado.3 == "Em Andamento" %}
+                        <a href="{% url 'Sistema_Poly:detalhes_protocolo' protocolo=resultado.0 %}" class="card-link">
+                            <div class="card">
+                                <div class="card-header">
+                                    <strong>Protocolo:</strong> {{ resultado.0 }}
+                                </div>
+                                <div class="protocol-details">
+                                    <strong>Nome da Vítima:</strong> {{ resultado.1 }}<br>
+                                    <strong>Data do Último Atendimento:</strong> {{ resultado.2 }}
+                                </div>
+                            </div>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <!-- Container: Casos Concluídos (Fase 1) -->
+            <div class="kanban-column">
+                <h3>✅ Concluídos</h3>
+                {% for resultado in resultados %}
+                    {% if resultado.4 == "Fase 1" and resultado.3 == "Concluída" %}
+                        <a href="{% url 'Sistema_Poly:detalhes_protocolo' protocolo=resultado.0 %}" class="card-link">
+                            <div class="card">
+                                <div class="card-header">
+                                    <strong>Protocolo:</strong> {{ resultado.0 }}
+                                </div>
+                                <div class="protocol-details">
+                                    <strong>Nome da Vítima:</strong> {{ resultado.1 }}<br>
+                                    <strong>Data do Último Atendimento:</strong> {{ resultado.2 }}
+                                </div>
+                            </div>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <!-- Container: Casos Desistentes (Fase 1) -->
+            <div class="kanban-column">
+                <h3>❌ Desistentes</h3>
+                {% for resultado in resultados %}
+                    {% if resultado.4 == "Fase 1" and resultado.3 == "Desistência na Fase 1" %}
+                        <a href="{% url 'Sistema_Poly:detalhes_protocolo' protocolo=resultado.0 %}" class="card-link">
+                            <div class="card">
+                                <div class="card-header">
+                                    <strong>Protocolo:</strong> {{ resultado.0 }}
+                                </div>
+                                <div class="protocol-details">
+                                    <strong>Nome da Vítima:</strong> {{ resultado.1 }}<br>
+                                    <strong>Data do Último Atendimento:</strong> {{ resultado.2 }}
+                                </div>
+                            </div>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <!-- Container: Falta de Contato (Fase 1) -->
+            <div class="kanban-column">
+                <h3>📵 Falta de Contato</h3>
+                {% for resultado in resultados %}
+                    {% if resultado.4 == "Fase 1" and resultado.3 == "Falta de contato com a vítima" %}
+                        <a href="{% url 'Sistema_Poly:detalhes_protocolo' protocolo=resultado.0 %}" class="card-link">
+                            <div class="card">
+                                <div class="card-header">
+                                    <strong>Protocolo:</strong> {{ resultado.0 }}
+                                </div>
+                                <div class="protocol-details">
+                                    <strong>Nome da Vítima:</strong> {{ resultado.1 }}<br>
+                                    <strong>Data do Último Atendimento:</strong> {{ resultado.2 }}
+                                </div>
+                            </div>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Fase 2 -->
+        <h2>Fase 2</h2>
+
+        <div class="kanban-container">
+            <!-- Container: Casos em Andamento (Fase 2) -->
+            <div class="kanban-column">
+                <h3>⏳ Em Andamento</h3>
+                {% for resultado in resultados %}
+                    {% if resultado.4 == 'Fase 2' and resultado.3 == 'Em Andamento' %}
+                        <a href="{% url 'Sistema_Poly:detalhes_protocolo' protocolo=resultado.0 %}" class="card-link">
+                            <div class="card">
+                                <div class="card-header">
+                                    <strong>Protocolo:</strong> {{ resultado.0 }}
+                                </div>
+                                <div class="protocol-details">
+                                    <strong>Nome da Vítima:</strong> {{ resultado.1 }}<br>
+                                    <strong>Data do Último Atendimento:</strong> {{ resultado.2 }}
+                                </div>
+                            </div>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <!-- Container: Casos Concluídos (Fase 2) -->
+            <div class="kanban-column">
+                <h3>✅ Concluídos</h3>
+                {% for resultado in resultados %}
+                    {% if resultado.4 == 'Fase 2' and resultado.3 == 'Concluída' %}
+                        <a href="{% url 'Sistema_Poly:detalhes_protocolo' protocolo=resultado.0 %}" class="card-link">
+                            <div class="card">
+                                <div class="card-header">
+                                    <strong>Protocolo:</strong> {{ resultado.0 }}
+                                </div>
+                                <div class="protocol-details">
+                                    <strong>Nome da Vítima:</strong> {{ resultado.1 }}<br>
+                                    <strong>Data do Último Atendimento:</strong> {{ resultado.2 }}
+                                </div>
+                            </div>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <!-- Container: Casos Desistentes (Fase 2) -->
+            <div class="kanban-column">
+                <h3>❌ Desistentes</h3>
+                {% for resultado in resultados %}
+                    {% if resultado.4 == 'Fase 2' and resultado.3 == 'Desistência na Fase 2' %}
+                        <a href="{% url 'Sistema_Poly:detalhes_protocolo' protocolo=resultado.0 %}" class="card-link">
+                            <div class="card">
+                                <div class="card-header">
+                                    <strong>Protocolo:</strong> {{ resultado.0 }}
+                                </div>
+                                <div class="protocol-details">
+                                    <strong>Nome da Vítima:</strong> {{ resultado.1 }}<br>
+                                    <strong>Data do Último Atendimento:</strong> {{ resultado.2 }}
+                                </div>
+                            </div>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <!-- Container: Falta de Contato (Fase 2) -->
+            <div class="kanban-column">
+                <h3>📵 Falta de Contato</h3>
+                {% for resultado in resultados %}
+                    {% if resultado.4 == 'Fase 2' and resultado.3 == 'Falta de contato com a vítima' %}
+                        <a href="{% url 'Sistema_Poly:detalhes_protocolo' protocolo=resultado.0 %}" class="card-link">
+                            <div class="card">
+                                <div class="card-header">
+                                    <strong>Protocolo:</strong> {{ resultado.0 }}
+                                </div>
+                                <div class="protocol-details">
+                                    <strong>Nome da Vítima:</strong> {{ resultado.1 }}<br>
+                                    <strong>Data do Último Atendimento:</strong> {{ resultado.2 }}
+                                </div>
+                            </div>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Fase 3 -->
+        <h2>Fase 3</h2>
+
+        <div class="kanban-container">
+            <!-- Container: Casos em Andamento (Fase 3) -->
+            <div class="kanban-column">
+                <h3>⏳ Em Andamento</h3>
+                {% for resultado in resultados %}
+                    {% if resultado.4 == 'Fase 3' and resultado.3 == 'Em Andamento' %}
+                        <a href="{% url 'Sistema_Poly:detalhes_protocolo' protocolo=resultado.0 %}" class="card-link">
+                            <div class="card">
+                                <div class="card-header">
+                                    <strong>Protocolo:</strong> {{ resultado.0 }}
+                                </div>
+                                <div class="protocol-details">
+                                    <strong>Nome da Vítima:</strong> {{ resultado.1 }}<br>
+                                    <strong>Data do Último Atendimento:</strong> {{ resultado.2 }}
+                                </div>
+                            </div>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <!-- Container: Casos Concluídos (Fase 3) -->
+            <div class="kanban-column">
+                <h3>✅ Concluídos</h3>
+                {% for resultado in resultados %}
+                    {% if resultado.4 == 'Fase 3' and resultado.3 == 'Concluída' %}
+                        <a href="{% url 'Sistema_Poly:detalhes_protocolo' protocolo=resultado.0 %}" class="card-link">
+                            <div class="card">
+                                <div class="card-header">
+                                    <strong>Protocolo:</strong> {{ resultado.0 }}
+                                </div>
+                                <div class="protocol-details">
+                                    <strong>Nome da Vítima:</strong> {{ resultado.1 }}<br>
+                                    <strong>Data do Último Atendimento:</strong> {{ resultado.2 }}
+                                </div>
+                            </div>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <!-- Container: Casos Desistentes (Fase 3) -->
+            <div class="kanban-column">
+                <h3>❌ Desistentes</h3>
+                {% for resultado in resultados %}
+                    {% if resultado.4 == 'Fase 3' and resultado.3 == 'Desistência na Fase 3' %}
+                        <a href="{% url 'Sistema_Poly:detalhes_protocolo' protocolo=resultado.0 %}" class="card-link">
+                            <div class="card">
+                                <div class="card-header">
+                                    <strong>Protocolo:</strong> {{ resultado.0 }}
+                                </div>
+                                <div class="protocol-details">
+                                    <strong>Nome da Vítima:</strong> {{ resultado.1 }}<br>
+                                    <strong>Data do Último Atendimento:</strong> {{ resultado.2 }}
+                                </div>
+                            </div>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <!-- Container: Falta de Contato (Fase 3) -->
+            <div class="kanban-column">
+                <h3>📵 Falta de Contato</h3>
+                {% for resultado in resultados %}
+                    {% if resultado.4 == 'Fase 3' and resultado.3 == 'Falta de contato com a vítima' %}
+                        <a href="{% url 'Sistema_Poly:detalhes_protocolo' protocolo=resultado.0 %}" class="card-link">
+                            <div class="card">
+                                <div class="card-header">
+                                    <strong>Protocolo:</strong> {{ resultado.0 }}
+                                </div>
+                                <div class="protocol-details">
+                                    <strong>Nome da Vítima:</strong> {{ resultado.1 }}<br>
+                                    <strong>Data do Último Atendimento:</strong> {{ resultado.2 }}
+                                </div>
+                            </div>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Fase 4 -->
+        <h2>Fase 4</h2>
+
+        <div class="kanban-container">
+            <!-- Container: Casos em Andamento (Fase 4) -->
+            <div class="kanban-column">
+                <h3>⏳ Em Andamento</h3>
+                {% for resultado in resultados %}
+                    {% if resultado.4 == 'Fase 4' and resultado.3 == 'Em Andamento' %}
+                        <a href="{% url 'Sistema_Poly:detalhes_protocolo' protocolo=resultado.0 %}" class="card-link">
+                            <div class="card">
+                                <div class="card-header">
+                                    <strong>Protocolo:</strong> {{ resultado.0 }}
+                                </div>
+                                <div class="protocol-details">
+                                    <strong>Nome da Vítima:</strong> {{ resultado.1 }}<br>
+                                    <strong>Data do Último Atendimento:</strong> {{ resultado.2 }}
+                                </div>
+                            </div>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <!-- Container: Casos Concluídos (Fase 4) -->
+            <div class="kanban-column">
+                <h3>✅ Concluídos</h3>
+                {% for resultado in resultados %}
+                    {% if resultado.4 == 'Fase 4' and resultado.3 == 'Concluída' %}
+                        <a href="{% url 'Sistema_Poly:detalhes_protocolo' protocolo=resultado.0 %}" class="card-link">
+                            <div class="card">
+                                <div class="card-header">
+                                    <strong>Protocolo:</strong> {{ resultado.0 }}
+                                </div>
+                                <div class="protocol-details">
+                                    <strong>Nome da Vítima:</strong> {{ resultado.1 }}<br>
+                                    <strong>Data do Último Atendimento:</strong> {{ resultado.2 }}
+                                </div>
+                            </div>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <!-- Container: Casos Desistentes (Fase 4) -->
+            <div class="kanban-column">
+                <h3>❌ Desistentes</h3>
+                {% for resultado in resultados %}
+                    {% if resultado.4 == 'Fase 4' and resultado.3 == 'Desistência na Fase 4' %}
+                        <a href="{% url 'Sistema_Poly:detalhes_protocolo' protocolo=resultado.0 %}" class="card-link">
+                            <div class="card">
+                                <div class="card-header">
+                                    <strong>Protocolo:</strong> {{ resultado.0 }}
+                                </div>
+                                <div class="protocol-details">
+                                    <strong>Nome da Vítima:</strong> {{ resultado.1 }}<br>
+                                    <strong>Data do Último Atendimento:</strong> {{ resultado.2 }}
+                                </div>
+                            </div>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <!-- Container: Falta de Contato (Fase 4) -->
+            <div class="kanban-column">
+                <h3>📵 Falta de Contato</h3>
+                {% for resultado in resultados %}
+                    {% if resultado.4 == 'Fase 4' and resultado.3 == 'Falta de contato com a vítima' %}
+                        <a href="{% url 'Sistema_Poly:detalhes_protocolo' protocolo=resultado.0 %}" class="card-link">
+                            <div class="card">
+                                <div class="card-header">
+                                    <strong>Protocolo:</strong> {{ resultado.0 }}
+                                </div>
+                                <div class="protocol-details">
+                                    <strong>Nome da Vítima:</strong> {{ resultado.1 }}<br>
+                                    <strong>Data do Último Atendimento:</strong> {{ resultado.2 }}
+                                </div>
+                            </div>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        <p class="no-results">Nenhum protocolo encontrado para os critérios de busca informados.</p>
+    {% endif %}
+</body>
+</html>

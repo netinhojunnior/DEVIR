@@ -1,0 +1,210 @@
+/* Definindo as cores principais */
+:root {
+    --verde-claro: #A5D6A7;      /* Verde claro para cabeçalhos e destaques */
+    --verde-escuro: #388E3C;    /* Verde escuro para textos e detalhes */
+    --branco: #ffffff;          /* Cor branca */
+    --cinza-claro: #f4f4f4;     /* Cor de fundo leve */
+    --preto: #333333;           /* Cor de texto */
+}
+
+/* Resetando algumas propriedades padrão */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilo do body */
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--cinza-claro);
+    color: var(--preto);
+    line-height: 1.6;
+    padding: 20px;
+}
+
+/* Container principal para a centralização */
+.container {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 30px;
+    background-color: rgba(255, 255, 255, 0.9); /* Cor branca com 90% de opacidade */
+    border-radius: 10px; /* Bordas mais arredondadas */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Sombra mais suave */
+    text-align: left;
+}
+
+/* Centralizando os títulos */
+h1, h2, h3 {
+    color: var(--verde-escuro);
+    margin-bottom: 20px;
+    text-align: center; /* Centraliza os títulos */
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+/* Estilo para os botões principais */
+button, .submit-btn {
+    background-color: rgba(165, 214, 167, 0.8); /* Verde claro com 80% de opacidade */
+    color: var(--branco);
+    border: none;
+    border-radius: 5px;
+    padding: 14px 22px;
+    font-size: 16px; /* Fonte um pouco maior */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin: 10px 0;
+    width: 200px;
+    min-width: 160px;
+}
+
+/* Hover para os botões */
+button:hover, .submit-btn:hover {
+    background-color: rgba(129, 199, 132, 0.9); /* Cor de hover mais suave com transparência */
+    transform: scale(1.05); /* Efeito de zoom suave */
+}
+
+/* Layout para os botões lado a lado (centralizados) */
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+}
+
+/* Estilo do formulário */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+form div {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+/* Ajustes nos campos de input, select e textarea */
+input, select, textarea {
+    padding: 12px;
+    font-size: 15px;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-top: 5px;
+    transition: border-color 0.3s ease;
+    background-color: rgba(244, 244, 244, 0.9); /* Fundo com 90% de opacidade */
+}
+
+/* Efeito de focus nos campos de input */
+input:focus, select:focus, textarea:focus {
+    border-color: var(--verde-escuro); /* Cor de foco */
+    outline: none; /* Remove o contorno padrão */
+}
+
+/* Estilo de botão de submit */
+form button {
+    width: 100%;
+    max-width: 300px;
+    margin-top: 20px;
+}
+
+/* Estilo adicional para documentos e upload */
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.form-group label {
+    width: 250px;
+    text-align: left;
+    font-weight: 500;
+}
+
+.form-group .field {
+    flex: 1;
+    text-align: right;
+}
+
+.document-container {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    background-color: rgba(244, 244, 244, 0.8); /* Cor com 80% de opacidade */
+}
+
+.document-item {
+    margin-right: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: rgba(244, 244, 244, 0.9); /* Fundo com 90% de opacidade */
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    max-width: 250px;
+    flex: 1 1 30%;
+    transition: background-color 0.3s ease;
+}
+
+.document-item:hover {
+    background-color: rgba(232, 232, 232, 0.9); /* Efeito de hover nos itens */
+}
+
+.document-item span {
+    margin-right: 10px;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 150px;
+}
+
+.remove-btn {
+    cursor: pointer;
+    color: #ff6347;
+    font-size: 20px;
+    background: none;
+    border: none;
+    padding: 0;
+    margin-left: 5px;
+}
+
+.document-upload-container {
+    margin-top: 10px;
+}
+
+/* Responsividade */
+@media screen and (max-width: 768px) {
+    .button-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    input, select, textarea {
+        max-width: 100%;
+    }
+
+    button {
+        width: 100%;
+    }
+
+    .container {
+        padding: 20px;
+    }
+}
+
+/* Máscara de Protocolo e Data/Hora - JavaScript */
+input[type="text"] {
+    font-family: monospace;
+}

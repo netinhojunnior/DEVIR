@@ -1,0 +1,1360 @@
+{% load static %}
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Protocolo</title>
+    <link rel="stylesheet" href="{% static 'atendimentos/styles.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+
+        .tab-container {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            margin-right: 5px;
+            background-color: #1E4F81;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .tab:hover {
+            background-color: #174C73;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab.active {
+            background-color: #174C73;
+        }
+
+        .submit-btn {
+            padding: 12px 24px;
+            background-color: #1E4F81;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 5px;
+        }
+
+        .submit-btn:hover {
+            background-color: #174C73;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-size: 16px;
+            color: #1E4F81;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 8px;
+            font-size: 16px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+        }
+
+        .form-group input[type="file"] {
+            padding: 5px;
+        }
+
+        /* Estilo do Dropdown */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            text-align: right; /* Alinha o dropdown à direita */
+        }
+
+        .dropdown-label {
+            background-color: #f1f1f1;
+            padding: 8px 12px;
+            width: 402px;
+            text-align: left; /* O texto dentro do botão do dropdown fica alinhado à esquerda */
+            border: 1px solid #ccc;
+            cursor: pointer;
+            font-size: 16px;
+            height: 40px;
+            box-sizing: border-box;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            margin-left: auto; /* Faz o dropdown alinhar-se à direita dentro do container */
+            margin-right: 0; /* Garante que não haja margem extra à direita */
+        }
+
+        .dropdown-label:hover {
+            background-color: #e0e0e0;
+        }
+
+        .dropdown-content {
+            position: absolute;
+            background-color: #fff;
+            width: 100%;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            display: none;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            padding: 0;
+            border-radius: 5px;
+        }
+
+        .dropdown-content label {
+            padding: 8px 12px;
+            display: block;
+            cursor: pointer;
+            word-wrap: break-word;
+            line-height: 1.4;
+            white-space: normal;
+        }
+
+        .dropdown-content label:hover {
+            background-color: #f1f1f1;
+        }
+
+        .dropdown.open .dropdown-content {
+            display: block;
+        }
+
+        .dropdown input {
+            margin-right: 10px;
+        }
+
+        /* Para o dropdown com múltiplas seleções */
+        .dropdown-content input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        /* Estilos para o conteúdo do dropdown com maior controle de rolagem */
+        .dropdown-content {
+            border-radius: 5px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Detalhes do Protocolo: {{ protocolo }}</h1>
+
+    {% if error %}
+        <div class="alert alert-danger">
+            {{ error }}
+        </div>
+    {% endif %}
+
+    <!-- Abas para cada fase -->
+    <div class="tab-container">
+        <div class="tab" onclick="showTab(1)">Fase 1</div>
+        <div class="tab" onclick="showTab(2)">Fase 2</div>
+        <div class="tab" onclick="showTab(3)">Fase 3</div>
+        <div class="tab" onclick="showTab(4)">Fase 4</div>
+    </div>
+
+    <!-- Conteúdo de cada aba -->
+
+    <!-- Aba Fase 1 --------------------------------------------------------------------------------------------------->
+    <div id="fase-1" class="tab-content">
+        <h3>Detalhes da Fase 1</h3>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="nome_completo">Nome Completo da Vítima:</label>
+                <input type="text" name="nome_completo" id="nome_completo" value="{{ fase1.nome_completo }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="cpf">CPF:</label>
+                <input type="text" name="cpf" id="cpf" value="{{ fase1.cpf }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="idade">Idade da Vítima na Época do Fato:</label>
+                <input type="number" name="idade" id="idade" value="{{ fase1.idade }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="telefone">Telefone:</label>
+                <input type="text" name="telefone" id="telefone" value="{{ fase1.telefone }}">
+            </div>
+
+            <div class="form-group">
+                <label for="bairro">Bairro:</label>
+                <input type="text" name="bairro" id="bairro" value="{{ fase1.bairro }}">
+            </div>
+
+            <div class="form-group">
+                <label for="cidade">Cidade:</label>
+                <input type="text" name="cidade" id="cidade" value="{{ fase1.cidade }}">
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.estado.id_for_label }}">Estado</label>
+                <div class="field">
+                    <select name="estado" id="estado">
+                        <option value="" {% if fase1.estado == '' %}selected{% endif %}>Selecione</option>
+                        <option value="AC" {% if fase1.estado == 'AC' %}selected{% endif %}>AC</option>
+                        <option value="AL" {% if fase1.estado == 'AL' %}selected{% endif %}>AL</option>
+                        <option value="AP" {% if fase1.estado == 'AP' %}selected{% endif %}>AP</option>
+                        <option value="AM" {% if fase1.estado == 'AM' %}selected{% endif %}>AM</option>
+                        <option value="BA" {% if fase1.estado == 'BA' %}selected{% endif %}>BA</option>
+                        <option value="CE" {% if fase1.estado == 'CE' %}selected{% endif %}>CE</option>
+                        <option value="DF" {% if fase1.estado == 'DF' %}selected{% endif %}>DF</option>
+                        <option value="ES" {% if fase1.estado == 'ES' %}selected{% endif %}>ES</option>
+                        <option value="GO" {% if fase1.estado == 'GO' %}selected{% endif %}>GO</option>
+                        <option value="MA" {% if fase1.estado == 'MA' %}selected{% endif %}>MA</option>
+                        <option value="MT" {% if fase1.estado == 'MT' %}selected{% endif %}>MT</option>
+                        <option value="MS" {% if fase1.estado == 'MS' %}selected{% endif %}>MS</option>
+                        <option value="MG" {% if fase1.estado == 'MG' %}selected{% endif %}>MG</option>
+                        <option value="PA" {% if fase1.estado == 'PA' %}selected{% endif %}>PA</option>
+                        <option value="PB" {% if fase1.estado == 'PB' %}selected{% endif %}>PB</option>
+                        <option value="PR" {% if fase1.estado == 'PR' %}selected{% endif %}>PR</option>
+                        <option value="PE" {% if fase1.estado == 'PE' %}selected{% endif %}>PE</option>
+                        <option value="PI" {% if fase1.estado == 'PI' %}selected{% endif %}>PI</option>
+                        <option value="RJ" {% if fase1.estado == 'RJ' %}selected{% endif %}>RJ</option>
+                        <option value="RN" {% if fase1.estado == 'RN' %}selected{% endif %}>RN</option>
+                        <option value="RS" {% if fase1.estado == 'RS' %}selected{% endif %}>RS</option>
+                        <option value="RO" {% if fase1.estado == 'RO' %}selected{% endif %}>RO</option>
+                        <option value="RR" {% if fase1.estado == 'RR' %}selected{% endif %}>RR</option>
+                        <option value="SC" {% if fase1.estado == 'SC' %}selected{% endif %}>SC</option>
+                        <option value="SP" {% if fase1.estado == 'SP' %}selected{% endif %}>SP</option>
+                        <option value="SE" {% if fase1.estado == 'SE' %}selected{% endif %}>SE</option>
+                        <option value="TO" {% if fase1.estado == 'TO' %}selected{% endif %}>TO</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="protocolo">Número do Protocolo DEVIR:</label>
+                <input type="text" name="protocolo" id="protocolo" value="{{ fase1.protocolo }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="validacao_dev">Data e Hora da Validação DEVIR:</label>
+                <input type="datetime-local" name="validacao_dev" id="validacao_dev" value="{{ fase1.validacao_dev|date:'Y-m-d\TH:i' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.policial_validacao.id_for_label }}">Policial Responsável pela Validação</label>
+                <div class="field">
+                    <select name="policial_validacao" id="policial_validacao">
+                        <option value="" {% if fase1.policial_validacao == '' %}selected{% endif %}>Selecione</option>
+                        <option value="MARIA NAZARÉ" {% if fase1.policial_validacao == 'MARIA NAZARÉ' %}selected{% endif %}>MARIA NAZARÉ</option>
+                        <option value="DANIELLA PORTO" {% if fase1.policial_validacao == 'DANIELLA PORTO' %}selected{% endif %}>DANIELLA PORTO</option>
+                        <option value="PAULA TIMBÓ" {% if fase1.policial_validacao == 'PAULA TIMBÓ' %}selected{% endif %}>PAULA TIMBÓ</option>
+                        <option value="THAYSA ALBUQUERQUE" {% if fase1.policial_validacao == 'THAYSA ALBUQUERQUE' %}selected{% endif %}>THAYSA ALBUQUERQUE</option>
+                        <option value="YASMIM CRISTINA" {% if fase1.policial_validacao == 'YASMIM CRISTINA' %}selected{% endif %}>YASMIM CRISTINA</option>
+                        <option value="AMANDA NASCIMENTO" {% if fase1.policial_validacao == 'AMANDA NASCIMENTO' %}selected{% endif %}>AMANDA NASCIMENTO</option>
+                        <option value="PAULA WILTSHIRE" {% if fase1.policial_validacao == 'PAULA WILTSHIRE' %}selected{% endif %}>PAULA WILTSHIRE</option>
+                        <option value="CARINA QUEIROZ" {% if fase1.policial_validacao == 'CARINA QUEIROZ' %}selected{% endif %}>CARINA QUEIROZ</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="registro_comunicacao">Data e Hora do Registro de Comunicação:</label>
+                <input type="datetime-local" name="registro_comunicacao" id="registro_comunicacao" value="{{ fase1.registro_comunicacao|date:'Y-m-d\TH:i' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="data_fato">Data e Hora do Fato:</label>
+                <input type="datetime-local" name="data_fato" id="data_fato" value="{{ fase1.data_fato|date:'Y-m-d\TH:i' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="natureza">Natureza:</label>
+                <input type="text" name="natureza" id="natureza" value="{{ fase1.natureza }}">
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.dp_apuracao.id_for_label }}">DP de Apuração</label>
+                <div class="field">
+                    <select name="dp_apuracao" id="dp_apuracao">
+                        <option value="" {% if fase1.dp_apuracao == '' %}selected{% endif %}>Selecione</option>
+                        <option value="Delegacia Especial de Atendimento À Mulher - Aracaju" {% if fase1.dp_apuracao == 'Delegacia Especial de Atendimento À Mulher - Aracaju' %}selected{% endif %}>Delegacia Especial de Atendimento À Mulher - Aracaju</option>
+                        <option value="Delegacia de Atendimento a Grupos Vulneráveis Barra Dos Coqueiros" {% if fase1.dp_apuracao == 'Delegacia de Atendimento a Grupos Vulneráveis Barra Dos Coqueiros' %}selected{% endif %}>Delegacia de Atendimento a Grupos Vulneráveis Barra Dos Coqueiros</option>
+                        <option value="Delegacia Especial de Atendimento a Grupos Vulneráveis Nossa Senhora do Socorro" {% if fase1.dp_apuracao == 'Delegacia Especial de Atendimento a Grupos Vulneráveis Nossa Senhora do Socorro' %}selected{% endif %}>Delegacia Especial de Atendimento a Grupos Vulneráveis Nossa Senhora do Socorro</option>
+                        <option value="Delegacia Especializada de Atendimento a Grupos Vulneráveis de São Cristóvão" {% if fase1.dp_apuracao == 'Delegacia Especializada de Atendimento a Grupos Vulneráveis de São Cristóvão' %}selected{% endif %}>Delegacia Especializada de Atendimento a Grupos Vulneráveis de São Cristóvão</option>
+                        <option value="Delegacia Especial de Atendimento À Grupos Vulneráveis Lagarto" {% if fase1.dp_apuracao == 'Delegacia Especial de Atendimento À Grupos Vulneráveis Lagarto' %}selected{% endif %}>Delegacia Especial de Atendimento À Grupos Vulneráveis Lagarto</option>
+                        <option value="Delegacia Especial de Atendimento À Grupos Vulneráveis Nossa Senhora da Glória" {% if fase1.dp_apuracao == 'Delegacia Especial de Atendimento À Grupos Vulneráveis Nossa Senhora da Glória' %}selected{% endif %}>Delegacia Especial de Atendimento À Grupos Vulneráveis Nossa Senhora da Glória</option>
+                        <option value="Delegacia Especial de Atendimento À Grupos Vulneráveis Itabaiana" {% if fase1.dp_apuracao == 'Delegacia Especial de Atendimento À Grupos Vulneráveis Itabaiana' %}selected{% endif %}>Delegacia Especial de Atendimento À Grupos Vulneráveis Itabaiana</option>
+                        <option value="Delegacia Especial de Atendimento À Grupos Vulneráveis Estância" {% if fase1.dp_apuracao == 'Delegacia Especial de Atendimento À Grupos Vulneráveis Estância' %}selected{% endif %}>Delegacia Especial de Atendimento À Grupos Vulneráveis Estância</option>
+                        <option value="Delegacia Regional de Itabaiana Aisp" {% if fase1.dp_apuracao == 'Delegacia Regional de Itabaiana Aisp' %}selected{% endif %}>Delegacia Regional de Itabaiana Aisp</option>
+                        <option value="Delegacia Regional de Lagarto Aisp" {% if fase1.dp_apuracao == 'Delegacia Regional de Lagarto Aisp' %}selected{% endif %}>Delegacia Regional de Lagarto Aisp</option>
+                        <option value="Delegacia Regional de Estância Aisp" {% if fase1.dp_apuracao == 'Delegacia Regional de Estância Aisp' %}selected{% endif %}>Delegacia Regional de Estância Aisp</option>
+                        <option value="Delegacia Regional de Propriá Aisp" {% if fase1.dp_apuracao == 'Delegacia Regional de Propriá Aisp' %}selected{% endif %}>Delegacia Regional de Propriá Aisp</option>
+                        <option value="Delegacia Regional de Tobias Barreto" {% if fase1.dp_apuracao == 'Delegacia Regional de Tobias Barreto' %}selected{% endif %}>Delegacia Regional de Tobias Barreto</option>
+                        <option value="Delegacia Regional de Maruim" {% if fase1.dp_apuracao == 'Delegacia Regional de Maruim' %}selected{% endif %}>Delegacia Regional de Maruim</option>
+                        <option value="Delegacia Regional de Neópolis" {% if fase1.dp_apuracao == 'Delegacia Regional de Neópolis' %}selected{% endif %}>Delegacia Regional de Neópolis</option>
+                        <option value="Delegacia Regional de Nossa Senhora da Glória Aisp" {% if fase1.dp_apuracao == 'Delegacia Regional de Nossa Senhora da Glória Aisp' %}selected{% endif %}>Delegacia Regional de Nossa Senhora da Glória Aisp</option>
+                        <option value="Delegacia Regional de Carira" {% if fase1.dp_apuracao == 'Delegacia Regional de Carira' %}selected{% endif %}>Delegacia Regional de Carira</option>
+                        <option value="Delegacia Regional de Carmópolis Aisp" {% if fase1.dp_apuracao == 'Delegacia Regional de Carmópolis Aisp' %}selected{% endif %}>Delegacia Regional de Carmópolis Aisp</option>
+                        <option value="Delegacia Regional de Nossa Senhora Das Dores Aisp" {% if fase1.dp_apuracao == 'Delegacia Regional de Nossa Senhora Das Dores Aisp' %}selected{% endif %}>Delegacia Regional de Nossa Senhora Das Dores Aisp</option>
+                        <option value="DISTRITAL" {% if fase1.dp_apuracao == 'DISTRITAL' %}selected{% endif %}>DISTRITAL</option>
+                        <option value="MUNICIPAL" {% if fase1.dp_apuracao == 'MUNICIPAL' %}selected{% endif %}>MUNICIPAL</option>
+                        <option value="Outra DP" {% if fase1.dp_apuracao == 'Outra DP' %}selected{% endif %}>Outra DP</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="finalizacao_atendimento">Data e Hora da Finalização do Atendimento:</label>
+                <input type="datetime-local" name="finalizacao_atendimento" id="finalizacao_atendimento" value="{{ fase1.finalizacao_atendimento|date:'Y-m-d\TH:i' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.policial_finalizacao.id_for_label }}">Policial Responsável pela Finalização</label>
+                <div class="field">
+                    <select name="policial_finalizacao" id="policial_finalizacao">
+                        <option value="" {% if fase1.policial_finalizacao == '' %}selected{% endif %}>Selecione</option>
+                        <option value="MARIA NAZARÉ" {% if fase1.policial_finalizacao == 'MARIA NAZARÉ' %}selected{% endif %}>MARIA NAZARÉ</option>
+                        <option value="DANIELLA PORTO" {% if fase1.policial_finalizacao == 'DANIELLA PORTO' %}selected{% endif %}>DANIELLA PORTO</option>
+                        <option value="PAULA TIMBÓ" {% if fase1.policial_finalizacao == 'PAULA TIMBÓ' %}selected{% endif %}>PAULA TIMBÓ</option>
+                        <option value="THAYSA ALBUQUERQUE" {% if fase1.policial_finalizacao == 'THAYSA ALBUQUERQUE' %}selected{% endif %}>THAYSA ALBUQUERQUE</option>
+                        <option value="YASMIM CRISTINA" {% if fase1.policial_finalizacao == 'YASMIM CRISTINA' %}selected{% endif %}>YASMIM CRISTINA</option>
+                        <option value="AMANDA NASCIMENTO" {% if fase1.policial_finalizacao == 'AMANDA NASCIMENTO' %}selected{% endif %}>AMANDA NASCIMENTO</option>
+                        <option value="PAULA WILTSHIRE" {% if fase1.policial_finalizacao == 'PAULA WILTSHIRE' %}selected{% endif %}>PAULA WILTSHIRE</option>
+                        <option value="CARINA QUEIROZ" {% if fase1.policial_finalizacao == 'CARINA QUEIROZ' %}selected{% endif %}>CARINA QUEIROZ</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.status_fase.id_for_label }}">Status da Fase</label>
+                <div class="field">
+                    <select name="status_fase" id="status_fase">
+                        <option value="" {% if fase1.status_fase == '' %}selected{% endif %}>Selecione</option>
+                        <option value="Em Andamento" {% if fase1.status_fase == 'Em Andamento' %}selected{% endif %}>Em Andamento</option>
+                        <option value="Concluída" {% if fase1.status_fase == 'Concluída' %}selected{% endif %}>Concluída</option>
+                        <option value="Desistência na Fase 1" {% if fase1.status_fase == 'Desistência na Fase 1' %}selected{% endif %}>Desistência na Fase 1</option>
+                        <option value="Falta de contato com a vítima" {% if fase1.status_fase == 'Falta de contato com a vítima' %}selected{% endif %}>Falta de contato com a vítima</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.falta_contato.id_for_label }}">Por Falta de Contato com a Vítima</label>
+                <div class="field">
+                    <select name="falta_contato" id="falta_contato">
+                        <option value="" {% if fase1.falta_contato == '' %}selected{% endif %}>Selecione</option>
+                        <option value="Certificado e Encaminhado à Delegacia Responsável" {% if fase1.falta_contato == 'Certificado e Encaminhado à Delegacia Responsável' %}selected{% endif %}>Certificado e Encaminhado à Delegacia Responsável</option>
+                        <option value="Não se Aplica" {% if fase1.falta_contato == 'Não se Aplica' %}selected{% endif %}>Não se Aplica</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="vitima_representou">A vítima Representou Criminalmente?</label>
+                <select name="vitima_representou" id="vitima_representou">
+                    <option value="Sim" {% if fase1.vitima_representou == 'Sim' %}selected{% endif %}>Sim</option>
+                    <option value="Não" {% if fase1.vitima_representou == 'Não' %}selected{% endif %}>Não</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="vitima_rep_criminal">A vítima utilizou o Card de Violência Doméstica?</label>
+                <select name="vitima_rep_criminal" id="vitima_rep_criminal">
+                    <option value="Sim" {% if fase1.vitima_rep_criminal == 'Sim' %}selected{% endif %}>Sim</option>
+                    <option value="Não" {% if fase1.vitima_rep_criminal == 'Não' %}selected{% endif %}>Não</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.caso_piloto.id_for_label }}">Caso Piloto</label>
+                <div class="field">
+                    <select name="caso_piloto" id="caso_piloto">
+                        <option value="" {% if fase1.caso_piloto == '' %}selected{% endif %}>Selecione</option>
+                        <option value="Sim" {% if fase1.caso_piloto == 'Sim' %}selected{% endif %}>Sim</option>
+                        <option value="Não" {% if fase1.caso_piloto == 'Não' %}selected{% endif %}>Não</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="observacoes">Observações (Facultativo):</label>
+                <textarea name="observacoes" id="observacoes">{{ fase1.observacoes }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="documentos">Documentos:</label>
+                <input type="file" name="documentos" id="documentos">
+            </div>
+
+            <button type="submit" name="fase" value="fase1" class="submit-btn">Salvar Alterações Fase 1</button>
+        </form>
+    </div>
+
+    <!-- Aba Fase 2 --------------------------------------------------------------------------------------------------->
+    <div id="fase-2" class="tab-content">
+        <h3>Detalhes da Fase 2</h3>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="protocolo">Número do Protocolo DEVIR:</label>
+                <input type="text" name="protocolo" id="protocolo" value="{{ fase2.protocolo }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="numero_bo">Número do BO (Após validação):</label>
+                <input type="text" name="numero_bo" id="numero_bo" value="{{ fase2.numero_bo }}">
+            </div>
+
+            <div class="form-group">
+                <label for="data_atendimento_fase2">Data e Hora do Atendimento Fase 2:</label>
+                <input type="datetime-local" name="data_atendimento_fase2" id="data_atendimento_fase2" value="{{ fase2.data_atendimento_fase2|date:'Y-m-d\TH:i' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="policial_responsavel">Policial Responsável pela Finalização da Fase</label>
+                <div class="field">
+                    <select name="policial_responsavel" id="policial_responsavel">
+                        <option value="" {% if fase2.policial_responsavel == '' %}selected{% endif %}>Selecione</option>
+                        <option value="MARIA NAZARÉ" {% if fase2.policial_responsavel == 'MARIA NAZARÉ' %}selected{% endif %}>MARIA NAZARÉ</option>
+                        <option value="DANIELLA PORTO" {% if fase2.policial_responsavel == 'DANIELLA PORTO' %}selected{% endif %}>DANIELLA PORTO</option>
+                        <option value="PAULA TIMBÓ" {% if fase2.policial_responsavel == 'PAULA TIMBÓ' %}selected{% endif %}>PAULA TIMBÓ</option>
+                        <option value="THAYSA ALBUQUERQUE" {% if fase2.policial_responsavel == 'THAYSA ALBUQUERQUE' %}selected{% endif %}>THAYSA ALBUQUERQUE</option>
+                        <option value="YASMIM CRISTINA" {% if fase2.policial_responsavel == 'YASMIM CRISTINA' %}selected{% endif %}>YASMIM CRISTINA</option>
+                        <option value="AMANDA NASCIMENTO" {% if fase2.policial_responsavel == 'AMANDA NASCIMENTO' %}selected{% endif %}>AMANDA NASCIMENTO</option>
+                        <option value="PAULA WILTSHIRE" {% if fase2.policial_responsavel == 'PAULA WILTSHIRE' %}selected{% endif %}>PAULA WILTSHIRE</option>
+                        <option value="CARINA QUEIROZ" {% if fase2.policial_responsavel == 'CARINA QUEIROZ' %}selected{% endif %}>CARINA QUEIROZ</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="observacoes">Observações:</label>
+                <textarea name="observacoes" id="observacoes">{{ fase2.observacoes }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="contato_vitima">Houve sucesso na tentativa de contato com a vítima/comunicante?</label>
+                <select name="contato_vitima" id="contato_vitima">
+                    <option value="" {% if fase2.contato_vitima == '' %}selected{% endif %}>Selecione</option>
+                    <option value="Sim" {% if fase2.contato_vitima == 'Sim' %}selected{% endif %}>Sim</option>
+                    <option value="Não" {% if fase2.contato_vitima == 'Não' %}selected{% endif %}>Não</option>
+                    <option value="Houve Recusa" {% if fase2.contato_vitima == 'Houve Recusa' %}selected{% endif %}>Houve Recusa</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="status_fase">Status da Fase 2:</label>
+                <select name="status_fase" id="status_fase">
+                    <option value="" {% if fase2.status_fase == '' %}selected{% endif %}>Selecione</option>
+                    <option value="Em Andamento" {% if fase2.status_fase == 'Em Andamento' %}selected{% endif %}>Em Andamento</option>
+                    <option value="Concluída" {% if fase2.status_fase == 'Concluída' %}selected{% endif %}>Concluída</option>
+                    <option value="Desistência na Fase 2" {% if fase2.status_fase == 'Desistência na Fase 2' %}selected{% endif %}>Desistência na Fase 2</option>
+                </select>
+            </div>
+
+            <button type="submit" name="fase" value="fase2" class="submit-btn">Salvar Alterações Fase 2</button>
+        </form>
+    </div>
+
+    <!-- Fase 3 ------------------------------------------------------------------------------------------------------->
+    <div id="fase-3" class="tab-content">
+        <h3>Detalhes da Fase 3</h3>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Número Protocolo DEVIR -->
+            <div class="form-group">
+                <label for="protocolo">Número Protocolo DEVIR</label>
+                <input type="text" name="protocolo" id="protocolo" value="{{ fase3.protocolo }}">
+            </div>
+
+            <!-- Participação na Videoconferência -->
+            <div class="form-group">
+                <label for="videoconferencia">A vítima/comunicante participou da videoconferência?</label>
+                <select name="videoconferencia" id="videoconferencia">
+                    <option value="" {% if fase3.videoconferencia == '' %}selected{% endif %}>Selecione</option>
+                    <option value="Sim" {% if fase3.videoconferencia == 'Sim' %}selected{% endif %}>Sim</option>
+                    <option value="Sim, mas não quis mostrar a imagem dela (sem câmera ligada)" {% if fase3.videoconferencia == 'Sim, mas não quis mostrar a imagem dela (sem câmera ligada)' %}selected{% endif %}>Sim, mas não quis mostrar a imagem dela (sem câmera ligada)</option>
+                    <option value="Não - o atendimento foi realizado por mensagem" {% if fase3.videoconferencia == 'Não - o atendimento foi realizado por mensagem' %}selected{% endif %}>Não - o atendimento foi realizado por mensagem</option>
+                    <option value="Não - o atendimento foi realizado por ligação" {% if fase3.videoconferencia == 'Não - o atendimento foi realizado por ligação' %}selected{% endif %}>Não - o atendimento foi realizado por ligação</option>
+                    <option value="Não houve gravação do vídeo" {% if fase3.videoconferencia == 'Não houve gravação do vídeo' %}selected{% endif %}>Não houve gravação do vídeo</option>
+                </select>
+            </div>
+
+            <!-- Medidas Protetivas -->
+            <div class="form-group">
+                <label for="medidas_protetivas">MPU - Medidas Protetivas de Urgência</label>
+                <div class="field">
+                    <!-- Dropdown para Medidas Protetivas -->
+                    <div class="dropdown">
+                        <div class="dropdown-label">Selecione as Medidas Protetivas</div>
+                        <div class="dropdown-content">
+                            <label><input type="checkbox" name="medidas_protetivas" value="Não Requereu MPU (Ela não quer MPU)"> Não Requereu MPU (Ela não quer MPU)</label>
+                            <label><input type="checkbox" name="medidas_protetivas" value="Suspender o direito do agressor possuir arma de fogo"> Suspender o direito do agressor possuir arma de fogo</label>
+                            <label><input type="checkbox" name="medidas_protetivas" value="Afastar o agressor do lar, domicílio e local de convivência com a vítima"> Afastar o agressor do lar, domicílio e local de convivência com a vítima</label>
+                            <label><input type="checkbox" name="medidas_protetivas" value="Proibir o agressor de se aproximar da vítima, de seus familiares e testemunhas"> Proibir o agressor de se aproximar da vítima, de seus familiares e testemunhas</label>
+                            <label><input type="checkbox" name="medidas_protetivas" value="Proibir o agressor de entrar em contato com a vítima, seus familiares e testemunhas por telefone, redes sociais (Facebook / WhatsApp), e-mail ou carta"> Proibir o agressor de entrar em contato com a vítima, seus familiares e testemunhas por telefone, redes sociais (Facebook / WhatsApp), e-mail ou carta</label>
+                            <label><input type="checkbox" name="medidas_protetivas" value="Proibir o agressor de frequentar os mesmos lugares que a vítima tais como trabalho, culto religioso, colégio dentre outros"> Proibir o agressor de frequentar os mesmos lugares que a vítima tais como trabalho, culto religioso, colégio dentre outros</label>
+                            <label><input type="checkbox" name="medidas_protetivas" value="Restringir temporariamente o agressor de visitar os filhos menores"> Restringir temporariamente o agressor de visitar os filhos menores</label>
+                            <label><input type="checkbox" name="medidas_protetivas" value="Suspender temporariamente o agressor de visitar os filhos menores"> Suspender temporariamente o agressor de visitar os filhos menores</label>
+                            <label><input type="checkbox" name="medidas_protetivas" value="Obrigar o agressor a fornecer alimentação para a vítima ou familiares"> Obrigar o agressor a fornecer alimentação para a vítima ou familiares</label>
+                            <label><input type="checkbox" name="medidas_protetivas" value="Encaminhamento da vítima e seus filhos em programas de proteção e atendimento à mulher em situação de violência doméstica e familiar"> Encaminhamento da vítima e seus filhos em programas de proteção e atendimento à mulher em situação de violência doméstica e familiar</label>
+                            <label><input type="checkbox" name="medidas_protetivas" value="Garantir o retorno da vítima e seus filhos ao lar abandonado em razão da agressão sofrida logo após ser determinado o afastamento do agressor"> Garantir o retorno da vítima e seus filhos ao lar abandonado em razão da agressão sofrida logo após ser determinado o afastamento do agressor</label>
+                            <label><input type="checkbox" name="medidas_protetivas" value="Garantir o direito da vítima sair do lar sem que perca os direitos em relação aos bens do casal, guarda dos filhos e alimentos"> Garantir o direito da vítima sair do lar sem que perca os direitos em relação aos bens do casal, guarda dos filhos e alimentos</label>
+                            <label><input type="checkbox" name="medidas_protetivas" value="Determinar que o casal deixe de morar no mesmo lar"> Determinar que o casal deixe de morar no mesmo lar</label>
+                            <label><input type="checkbox" name="medidas_protetivas" value="Determinar que o agressor devolva os bens indevidamente subtraídos da ofendida"> Determinar que o agressor devolva os bens indevidamente subtraídos da ofendida</label>
+                            <label><input type="checkbox" name="medidas_protetivas" value="Proibir temporariamente o agressor de celebrar atos e contratos de compra, venda, locação de propriedade em comum - salvo com expressa autorização judicial"> Proibir temporariamente o agressor de celebrar atos e contratos de compra, venda, locação de propriedade em comum - salvo com expressa autorização judicial</label>
+                            <label><input type="checkbox" name="medidas_protetivas" value="Suspender as procurações conferidas pela ofendida ao agressor"> Suspender as procurações conferidas pela ofendida ao agressor</label>
+                            <label><input type="checkbox" name="medidas_protetivas" value="Prestação de caução provisória mediante depósito judicial, por perdas e danos materiais decorrentes da prática de violência doméstica e familiar contra a ofendida"> Prestação de caução provisória mediante depósito judicial, por perdas e danos materiais decorrentes da prática de violência doméstica e familiar contra a ofendida</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ameaça -->
+            <div class="form-group">
+                <label for="ameaca">O(A) agressor(a) já ameaçou você ou algum familiar com a finalidade de atingi-la?</label>
+                <select name="ameaca" id="ameaca">
+                    <option value="" {% if fase3.ameaca == '' %}selected{% endif %}>Selecione</option>
+                    <option value="Não" {% if fase3.ameaca == 'Não' %}selected{% endif %}>Não</option>
+                    <option value="Sim - utilizando arma de fogo" {% if fase3.ameaca == 'Sim - utilizando arma de fogo' %}selected{% endif %}>Sim - utilizando arma de fogo</option>
+                    <option value="Sim - utilizando faca" {% if fase3.ameaca == 'Sim - utilizando faca' %}selected{% endif %}>Sim - utilizando faca</option>
+                    <option value="Sim - de outra forma" {% if fase3.ameaca == 'Sim - de outra forma' %}selected{% endif %}>Sim - de outra forma</option>
+                </select>
+            </div>
+
+            <!-- Agressão Física -->
+            <div class="form-group">
+                <label for="agressao_fisica">O(A) agressor(a) já praticou alguma(s) dessas agressões físicas contra você?</label>
+                <div class="field">
+                    <div class="dropdown">
+                        <div class="dropdown-label">Selecione as agressões físicas</div>
+                        <div class="dropdown-content">
+                            <label><input type="checkbox" name="agressao_fisica" value="Queimadura" /> Queimadura</label>
+                            <label><input type="checkbox" name="agressao_fisica" value="Enforcamento" /> Enforcamento</label>
+                            <label><input type="checkbox" name="agressao_fisica" value="Sufocamento" /> Sufocamento</label>
+                            <label><input type="checkbox" name="agressao_fisica" value="Estrangulamento" /> Estrangulamento</label>
+                            <label><input type="checkbox" name="agressao_fisica" value="Tiro" /> Tiro</label>
+                            <label><input type="checkbox" name="agressao_fisica" value="Afogamento" /> Afogamento</label>
+                            <label><input type="checkbox" name="agressao_fisica" value="Facada" /> Facada</label>
+                            <label><input type="checkbox" name="agressao_fisica" value="Paulada" /> Paulada</label>
+                            <label><input type="checkbox" name="agressao_fisica" value="Soco" /> Soco</label>
+                            <label><input type="checkbox" name="agressao_fisica" value="Chute" /> Chute</label>
+                            <label><input type="checkbox" name="agressao_fisica" value="Tapa" /> Tapa</label>
+                            <label><input type="checkbox" name="agressao_fisica" value="Empurrão" /> Empurrão</label>
+                            <label><input type="checkbox" name="agressao_fisica" value="Puxão de cabelo" /> Puxão de cabelo</label>
+                            <label><input type="checkbox" name="agressao_fisica" value="Outra" /> Outra</label>
+                            <label><input type="checkbox" name="agressao_fisica" value="Nenhuma agressão física" /> Nenhuma agressão física</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Atendimento Médico -->
+            <div class="form-group">
+                <label for="atendimento_medico">Você necessitou de atendimento médico e/ou internação após algumas dessas agressões?</label>
+                <select name="atendimento_medico" id="atendimento_medico">
+                    <option value="" {% if fase3.atendimento_medico == '' %}selected{% endif %}>Selecione</option>
+                    <option value="Sim" {% if fase3.atendimento_medico == 'Sim' %}selected{% endif %}>Sim</option>
+                    <option value="Não" {% if fase3.atendimento_medico == 'Não' %}selected{% endif %}>Não</option>
+                    <option value="Não Sei" {% if fase3.atendimento_medico == 'Não Sei' %}selected{% endif %}>Não Sei</option>
+                </select>
+            </div>
+
+            <!-- Agressão Sexual -->
+            <div class="form-group">
+                <label for="agressao_sexual">O(A) agressor(a) já obrigou você a ter relações sexuais ou praticar atos sexuais contra a sua vontade?</label>
+                <select name="agressao_sexual" id="agressao_sexual">
+                    <option value="" {% if fase3.agressao_sexual == '' %}selected{% endif %}>Selecione</option>
+                    <option value="Sim" {% if fase3.agressao_sexual == 'Sim' %}selected{% endif %}>Sim</option>
+                    <option value="Não" {% if fase3.agressao_sexual == 'Não' %}selected{% endif %}>Não</option>
+                    <option value="Não Sei" {% if fase3.agressao_sexual == 'Não Sei' %}selected{% endif %}>Não Sei</option>
+                </select>
+            </div>
+
+            <!-- Controle do Agressor -->
+            <div class="form-group">
+                <label for="agressao_controle">O(A) agressor(a) persegue você, demonstra ciúme excessivo, tenta controlar sua vida e as coisas que você faz?</label>
+                <select name="agressao_controle" id="agressao_controle">
+                    <option value="" {% if fase3.agressao_controle == '' %}selected{% endif %}>Selecione</option>
+                    <option value="Sim" {% if fase3.agressao_controle == 'Sim' %}selected{% endif %}>Sim</option>
+                    <option value="Não" {% if fase3.agressao_controle == 'Não' %}selected{% endif %}>Não</option>
+                    <option value="Não Sei" {% if fase3.agressao_controle == 'Não Sei' %}selected{% endif %}>Não Sei</option>
+                </select>
+            </div>
+
+            <!-- O que houve após agressões -->
+            <div class="form-group">
+                <label for="consequencias_lesao">O que houve com a vítima após essas lesões (FÍSICAS ou SEXUAIS anteriores por esse agressor)?</label>
+                <select name="consequencias_lesao" id="consequencias_lesao">
+                    <option value="" {% if fase3.consequencias_lesao == '' %}selected{% endif %}>Selecione</option>
+                    <option value="Passei por atendimento em hospital ou posto" {% if fase3.consequencias_lesao == 'Passei por atendimento em hospital ou posto' %}selected{% endif %}>Passei por atendimento em hospital ou posto</option>
+                    <option value="Não passei por atendimento" {% if fase3.consequencias_lesao == 'Não passei por atendimento' %}selected{% endif %}>Não passei por atendimento</option>
+                    <option value="Não houve lesão física aparente" {% if fase3.consequencias_lesao == 'Não houve lesão física aparente' %}selected{% endif %}>Não houve lesão física aparente</option>
+                    <option value="Sofri apenas violência psicológica" {% if fase3.consequencias_lesao == 'Sofri apenas violência psicológica' %}selected{% endif %}>Sofri apenas violência psicológica</option>
+                    <option value="Não" {% if fase3.consequencias_lesao == 'Não' %}selected{% endif %}>Não</option>
+                    <option value="Outro" {% if fase3.consequencias_lesao == 'Outro' %}selected{% endif %}>Outro</option>
+                </select>
+            </div>
+
+            <!-- Comportamentos do Agressor -->
+            <div class="form-group">
+                <label for="comportamentos">Quais comportamentos o agressor já teve com você?</label>
+                <div class="field">
+                    <div class="dropdown">
+                        <div class="dropdown-label">Selecione os Comportamentos do Agressor</div>
+                        <div class="dropdown-content">
+                            <label><input type="checkbox" name="comportamentos" value="Se não for minha, não será de mais ninguém" /> Se não for minha, não será de mais ninguém</label>
+                            <label><input type="checkbox" name="comportamentos" value="Perturbou, perseguiu ou vigiou você nos locais que frequenta" /> Perturbou, perseguiu ou vigiou você nos locais que frequenta</label>
+                            <label><input type="checkbox" name="comportamentos" value="Proibiu você de visitar familiares ou amigos" /> Proibiu você de visitar familiares ou amigos</label>
+                            <label><input type="checkbox" name="comportamentos" value="Proibiu você de trabalhar ou estudar" /> Proibiu você de trabalhar ou estudar</label>
+                            <label><input type="checkbox" name="comportamentos" value="Fez telefonemas, enviou mensagens ou e-mails de forma insistente" /> Fez telefonemas, enviou mensagens ou e-mails de forma insistente</label>
+                            <label><input type="checkbox" name="comportamentos" value="Impediu você de ter acesso a dinheiro, conta bancária ou outros bens" /> Impediu você de ter acesso a dinheiro, conta bancária ou outros bens</label>
+                            <label><input type="checkbox" name="comportamentos" value="Teve outros comportamentos de ciúme excessivo e de controle sobre você" /> Teve outros comportamentos de ciúme excessivo e de controle sobre você</label>
+                            <label><input type="checkbox" name="comportamentos" value="Nenhum dos comportamentos acima listados" /> Nenhum dos comportamentos acima listados</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Registro de Ocorrência -->
+            <div class="form-group">
+                <label for="registro_ocorrencia">Você já registrou ocorrência policial ou formulou pedido de medida protetiva de urgência envolvendo esse(a) mesmo(a) agressor(a)?</label>
+                <select name="registro_ocorrencia" id="registro_ocorrencia">
+                    <option value="" {% if fase3.registro_ocorrencia == '' %}selected{% endif %}>Selecione</option>
+                    <option value="Sim" {% if fase3.registro_ocorrencia == 'Sim' %}selected{% endif %}>Sim</option>
+                    <option value="Não" {% if fase3.registro_ocorrencia == 'Não' %}selected{% endif %}>Não</option>
+                </select>
+            </div>
+
+            <!-- Descumprimento de Medida -->
+            <div class="form-group">
+                <label for="descumprimento_medida">O(A) agressor(a) já descumpriu medida protetiva anteriormente?</label>
+                <select name="descumprimento_medida" id="descumprimento_medida">
+                    <option value="" {% if fase3.descumprimento_medida == '' %}selected{% endif %}>Selecione</option>
+                    <option value="Sim" {% if fase3.descumprimento_medida == 'Sim' %}selected{% endif %}>Sim</option>
+                    <option value="Não" {% if fase3.descumprimento_medida == 'Não' %}selected{% endif %}>Não</option>
+                    <option value="Não Sei" {% if fase3.descumprimento_medida == 'Não Sei' %}selected{% endif %}>Não Sei</option>
+                </select>
+            </div>
+
+            <!-- Número do Processo MPU -->
+            <div class="form-group">
+                <label for="numero_processo_mpu">Informe os nº do processo de MPU ANTERIOR</label>
+                <input type="text" name="numero_processo_mpu" id="numero_processo_mpu" value="{{ fase3.numero_processo_mpu }}">
+            </div>
+
+            <!-- Agressões mais Frequentes -->
+            <div class="form-group">
+                <label for="agressao_frequente">As agressões ou ameaças do(a) agressor(a) contra você se tornaram mais frequentes ou mais graves nos últimos meses?</label>
+                <select name="agressao_frequente" id="agressao_frequente">
+                    <option value="" {% if fase3.agressao_frequente == '' %}selected{% endif %}>Selecione</option>
+                    <option value="Sim" {% if fase3.agressao_frequente == 'Sim' %}selected{% endif %}>Sim</option>
+                    <option value="Não" {% if fase3.agressao_frequente == 'Não' %}selected{% endif %}>Não</option>
+                    <option value="Não Sei" {% if fase3.agressao_frequente == 'Não Sei' %}selected{% endif %}>Não Sei</option>
+                </select>
+            </div>
+
+            <!-- Uso Abusivo -->
+            <div class="form-group">
+                <label for="uso_abusivo">O(A) agressor(a) faz uso abusivo de álcool ou de drogas ou medicamentos?</label>
+                <select name="uso_abusivo" id="uso_abusivo">
+                    <option value="" {% if fase3.uso_abusivo == '' %}selected{% endif %}>Selecione</option>
+                    <option value="Sim, de álcool" {% if fase3.uso_abusivo == 'Sim, de álcool' %}selected{% endif %}>Sim, de álcool</option>
+                    <option value="Sim, de drogas" {% if fase3.uso_abusivo == 'Sim, de drogas' %}selected{% endif %}>Sim, de drogas</option>
+                    <option value="Sim, de medicamentos" {% if fase3.uso_abusivo == 'Sim, de medicamentos' %}selected{% endif %}>Sim, de medicamentos</option>
+                    <option value="Não" {% if fase3.uso_abusivo == 'Não' %}selected{% endif %}>Não</option>
+                    <option value="Não sei" {% if fase3.uso_abusivo == 'Não sei' %}selected{% endif %}>Não sei</option>
+                </select>
+            </div>
+
+            <!-- Doença Mental -->
+            <div class="form-group">
+                <label for="doenca_mental">O(A) agressor(a) tem alguma doença mental comprovada por avaliação médica?</label>
+                <select name="doenca_mental" id="doenca_mental">
+                    <option value="" {% if fase3.doenca_mental == '' %}selected{% endif %}>Selecione</option>
+                    <option value="Sim, com uso de medicação" {% if fase3.doenca_mental == 'Sim, com uso de medicação' %}selected{% endif %}>Sim, com uso de medicação</option>
+                    <option value="Sim, sem uso de medicação" {% if fase3.doenca_mental == 'Sim, sem uso de medicação' %}selected{% endif %}>Sim, sem uso de medicação</option>
+                    <option value="Não" {% if fase3.doenca_mental == 'Não' %}selected{% endif %}>Não</option>
+                    <option value="Não sei" {% if fase3.doenca_mental == 'Não sei' %}selected{% endif %}>Não sei</option>
+                </select>
+            </div>
+
+            <!-- Suicídio -->
+            <div class="form-group">
+                <label for="suicidio">O(A) agressor(a) já tentou suicídio ou falou em suicidar-se?</label>
+                <select name="suicidio" id="suicidio">
+                    <option value="" {% if fase3.suicidio == '' %}selected{% endif %}>Selecione</option>
+                    <option value="Sim" {% if fase3.suicidio == 'Sim' %}selected{% endif %}>Sim</option>
+                    <option value="Não" {% if fase3.suicidio == 'Não' %}selected{% endif %}>Não</option>
+                    <option value="Não Sei" {% if fase3.suicidio == 'Não Sei' %}selected{% endif %}>Não Sei</option>
+                </select>
+            </div>
+
+            <!-- Dificuldades Financeiras -->
+            <div class="form-group">
+                <label for="dificuldade_financeira">O(A) agressor(a) está com dificuldades financeiras, está desempregado ou tem dificuldade de se manter no emprego?</label>
+                <select name="dificuldade_financeira" id="dificuldade_financeira">
+                    <option value="" {% if fase3.dificuldade_financeira == '' %}selected{% endif %}>Selecione</option>
+                    <option value="Sim" {% if fase3.dificuldade_financeira == 'Sim' %}selected{% endif %}>Sim</option>
+                    <option value="Não" {% if fase3.dificuldade_financeira == 'Não' %}selected{% endif %}>Não</option>
+                    <option value="Não Sei" {% if fase3.dificuldade_financeira == 'Não Sei' %}selected{% endif %}>Não Sei</option>
+                </select>
+            </div>
+
+            <!-- Arma de Fogo -->
+            <div class="form-group">
+                <label for="arma_fogo">O(A) agressor(a) já usou, ameaçou usar arma de fogo contra você ou tem fácil acesso a uma arma?</label>
+                <select name="arma_fogo" id="arma_fogo">
+                    <option value="" {% if fase3.arma_fogo == '' %}selected{% endif %}>Selecione</option>
+                    <option value="Sim, usou" {% if fase3.arma_fogo == 'Sim, usou' %}selected{% endif %}>Sim, usou</option>
+                    <option value="Sim, ameaçou usar" {% if fase3.arma_fogo == 'Sim, ameaçou usar' %}selected{% endif %}>Sim, ameaçou usar</option>
+                    <option value="Tem fácil acesso" {% if fase3.arma_fogo == 'Tem fácil acesso' %}selected{% endif %}>Tem fácil acesso</option>
+                    <option value="Não Sei" {% if fase3.arma_fogo == 'Não Sei' %}selected{% endif %}>Não Sei</option>
+                    <option value="Não" {% if fase3.arma_fogo == 'Não' %}selected{% endif %}>Não</option>
+                </select>
+            </div>
+
+            <!-- Agressões a Outros -->
+            <div class="form-group">
+                <label for="agressao_outros">O(A) agressor(a) já ameaçou ou agrediu seus filhos, outros familiares, amigos, colegas de trabalho, pessoas desconhecidas ou animais?</label>
+                <div class="field">
+                    <div class="dropdown">
+                        <div class="dropdown-label">Selecione as Agressões ou Ameaças contra outros</div>
+                        <div class="dropdown-content">
+                            <label><input type="checkbox" name="agressao_outros" value="Sim, filhos" /> Sim, filhos</label>
+                            <label><input type="checkbox" name="agressao_outros" value="Sim, outros familiares" /> Sim, outros familiares</label>
+                            <label><input type="checkbox" name="agressao_outros" value="Sim, amigos" /> Sim, amigos</label>
+                            <label><input type="checkbox" name="agressao_outros" value="Sim, colegas de trabalho" /> Sim, colegas de trabalho</label>
+                            <label><input type="checkbox" name="agressao_outros" value="Sim, outras pessoas" /> Sim, outras pessoas</label>
+                            <label><input type="checkbox" name="agressao_outros" value="Sim, animais" /> Sim, animais</label>
+                            <label><input type="checkbox" name="agressao_outros" value="Não" /> Não</label>
+                            <label><input type="checkbox" name="agressao_outros" value="Não Sei" /> Não Sei</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Separação Recente -->
+            <div class="form-group">
+                <label for="separacao_recente">Você se separou recentemente do(a) agressor(a), tentou ou manifestou intenção de se separar?</label>
+                <select name="separacao_recente" id="separacao_recente">
+                    <option value="" {% if fase3.separacao_recente == '' %}selected{% endif %}>Selecione</option>
+                    <option value="Sim" {% if fase3.separacao_recente == 'Sim' %}selected{% endif %}>Sim</option>
+                    <option value="Não" {% if fase3.separacao_recente == 'Não' %}selected{% endif %}>Não</option>
+                </select>
+            </div>
+
+            <!-- Quantos Filhos -->
+            <div class="form-group">
+                <label for="qtd_filhos">Quantos filhos possui?</label>
+                <select name="qtd_filhos" id="qtd_filhos">
+                    <option value="" {% if fase3.qtd_filhos == '' %}selected{% endif %}>Selecione</option>
+                    <option value="1 filho(a)" {% if fase3.qtd_filhos == '1 filho(a)' %}selected{% endif %}>1 filho(a)</option>
+                    <option value="2 filhos(as)" {% if fase3.qtd_filhos == '2 filhos(as)' %}selected{% endif %}>2 filhos(as)</option>
+                    <option value="3 filhos(as)" {% if fase3.qtd_filhos == '3 filhos(as)' %}selected{% endif %}>3 filhos(as)</option>
+                    <option value="Mais de 3 filhos(as)" {% if fase3.qtd_filhos == 'Mais de 3 filhos(as)' %}selected{% endif %}>Mais de 3 filhos(as)</option>
+                    <option value="Não possuo filhos" {% if fase3.qtd_filhos == 'Não possuo filhos' %}selected{% endif %}>Não possuo filhos</option>
+                </select>
+            </div>
+
+            <!-- Filhos com Agressor -->
+            <div class="form-group">
+                <label for="filhos_com_agressor">Você tem filhos com o(a) agressor(a)? Se sim, quantos?</label>
+                <select name="filhos_com_agressor" id="filhos_com_agressor">
+                    <option value="" {% if fase3.filhos_com_agressor == '' %}selected{% endif %}>Selecione</option>
+                    <option value="Não" {% if fase3.filhos_com_agressor == 'Não' %}selected{% endif %}>Não</option>
+                    <option value="Sim, 1 filho(a)" {% if fase3.filhos_com_agressor == 'Sim, 1 filho(a)' %}selected{% endif %}>Sim, 1 filho(a)</option>
+                    <option value="Sim, 2 filhos(as)" {% if fase3.filhos_com_agressor == 'Sim, 2 filhos(as)' %}selected{% endif %}>Sim, 2 filhos(as)</option>
+                    <option value="Sim, 3 filhos(as)" {% if fase3.filhos_com_agressor == 'Sim, 3 filhos(as)' %}selected{% endif %}>Sim, 3 filhos(as)</option>
+                    <option value="Sim, mais de 3 filhos(as)" {% if fase3.filhos_com_agressor == 'Sim, mais de 3 filhos(as)' %}selected{% endif %}>Sim, mais de 3 filhos(as)</option>
+                </select>
+            </div>
+
+            <!-- Filho com Deficiência -->
+            <div class="form-group">
+                <label for="filho_com_deficiencia">Algum de seus filhos é pessoa com deficiência?</label>
+                <select name="filho_com_deficiencia" id="filho_com_deficiencia">
+                    <option value="" {% if fase3.filho_com_deficiencia == '' %}selected{% endif %}>Selecione</option>
+                    <option value="Sim" {% if fase3.filho_com_deficiencia == 'Sim' %}selected{% endif %}>Sim</option>
+                    <option value="Não" {% if fase3.filho_com_deficiencia == 'Não' %}selected{% endif %}>Não</option>
+                    <option value="Não Se Aplica" {% if fase3.filho_com_deficiencia == 'Não Se Aplica' %}selected{% endif %}>Não Se Aplica</option>
+                </select>
+            </div>
+
+            <!-- Conflito de Guarda -->
+            <div class="form-group">
+                <label for="conflito_guarda">Estão vivendo algum conflito com relação à guarda dos filhos, visitas ou pagamento de pensão pelo agressor?</label>
+                <select name="conflito_guarda" id="conflito_guarda">
+                    <option value="" {% if fase3.conflito_guarda == '' %}selected{% endif %}>Selecione</option>
+                    <option value="Sim" {% if fase3.conflito_guarda == 'Sim' %}selected{% endif %}>Sim</option>
+                    <option value="Não" {% if fase3.conflito_guarda == 'Não' %}selected{% endif %}>Não</option>
+                    <option value="Não Sei" {% if fase3.conflito_guarda == 'Não Sei' %}selected{% endif %}>Não Sei</option>
+                </select>
+            </div>
+
+            <!-- Filhos Presenciaram -->
+            <div class="form-group">
+                <label for="filhos_presenciaram">Seu(s) filho(s) já presenciaram ato(s) de violência do(a) agressor(a) contra você?</label>
+                <select name="filhos_presenciaram" id="filhos_presenciaram">
+                    <option value="" {% if fase3.filhos_presenciaram == '' %}selected{% endif %}>Selecione</option>
+                    <option value="Sim" {% if fase3.filhos_presenciaram == 'Sim' %}selected{% endif %}>Sim</option>
+                    <option value="Não" {% if fase3.filhos_presenciaram == 'Não' %}selected{% endif %}>Não</option>
+                    <option value="Não Sei" {% if fase3.filhos_presenciaram == 'Não Sei' %}selected{% endif %}>Não Sei</option>
+                </select>
+            </div>
+
+            <!-- Violência na Gravidez -->
+            <div class="form-group">
+                <label for="violencia_gravidez">Você sofreu algum tipo de violência durante a gravidez ou nos três meses posteriores ao parto?</label>
+                <select name="violencia_gravidez" id="violencia_gravidez">
+                    <option value="" {% if fase3.violencia_gravidez == '' %}selected{% endif %}>Selecione</option>
+                    <option value="Sim" {% if fase3.violencia_gravidez == 'Sim' %}selected{% endif %}>Sim</option>
+                    <option value="Não" {% if fase3.violencia_gravidez == 'Não' %}selected{% endif %}>Não</option>
+                    <option value="Não Sei" {% if fase3.violencia_gravidez == 'Não Sei' %}selected{% endif %}>Não Sei</option>
+                </select>
+            </div>
+
+            <!-- Gravidez ou Bebê -->
+            <div class="form-group">
+                <label for="gravida_ou_bebe">Você está grávida ou teve bebê nos últimos 18 meses?</label>
+                <select name="gravida_ou_bebe" id="gravida_ou_bebe">
+                    <option value="" {% if fase3.gravida_ou_bebe == '' %}selected{% endif %}>Selecione</option>
+                    <option value="Sim" {% if fase3.gravida_ou_bebe == 'Sim' %}selected{% endif %}>Sim</option>
+                    <option value="Não" {% if fase3.gravida_ou_bebe == 'Não' %}selected{% endif %}>Não</option>
+                    <option value="Não Sei" {% if fase3.gravida_ou_bebe == 'Não Sei' %}selected{% endif %}>Não Sei</option>
+                </select>
+            </div>
+
+            <!-- Ameaças por Novo Relacionamento -->
+            <div class="form-group">
+                <label for="ameacas_novo_relacionamento">Se você está em um novo relacionamento, as ameaças ou as agressões físicas aumentaram em razão disso?</label>
+                <div class="field">
+                    <select id="ameacas_novo_relacionamento" name="ameacas_novo_relacionamento">
+                        <option value="" {% if fase3.ameacas_novo_relacionamento == '' %}selected{% endif %}>Selecione</option>
+                        <option value="Sim" {% if fase3.ameacas_novo_relacionamento == 'Sim' %}selected{% endif %}>Sim</option>
+                        <option value="Não" {% if fase3.ameacas_novo_relacionamento == 'Não' %}selected{% endif %}>Não</option>
+                        <option value="Não Sei" {% if fase3.ameacas_novo_relacionamento == 'Não Sei' %}selected{% endif %}>Não Sei</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Deficiência ou Doença -->
+            <div class="form-group">
+                <label for="deficiencia_ou_doenca">Você possui alguma deficiência ou doença degenerativa que acarretam condição limitante ou de vulnerabilidade física ou mental?</label>
+                <div class="field">
+                    <select id="deficiencia_ou_doenca" name="deficiencia_ou_doenca">
+                        <option value="" {% if fase3.deficiencia_ou_doenca == '' %}selected{% endif %}>Selecione</option>
+                        <option value="Sim" {% if fase3.deficiencia_ou_doenca == 'Sim' %}selected{% endif %}>Sim</option>
+                        <option value="Não" {% if fase3.deficiencia_ou_doenca == 'Não' %}selected{% endif %}>Não</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Caso tenha respondido sim à pergunta anterior, especifique a deficiência ou doença degenerativa -->
+            <div class="form-group">
+                <label for="deficiencia_vitima">Caso tenha respondido sim à pergunta anterior, especifique a deficiência ou doença degenerativa</label>
+                <input type="text" name="deficiencia_vitima" id="deficiencia_vitima" value="{{ fase3.deficiencia_vitima }}">
+            </div>
+
+            <!-- Cor/Raça -->
+            <div class="form-group">
+                <label for="cor_raca">Com qual cor/raça você se identifica?</label>
+                <div class="field">
+                    <select id="cor_raca" name="cor_raca">
+                        <option value="" {% if fase3.cor_raca == '' %}selected{% endif %}>Selecione</option>
+                        <option value="Branca" {% if fase3.cor_raca == 'Branca' %}selected{% endif %}>Branca</option>
+                        <option value="Preta" {% if fase3.cor_raca == 'Preta' %}selected{% endif %}>Preta</option>
+                        <option value="Parda" {% if fase3.cor_raca == 'Parda' %}selected{% endif %}>Parda</option>
+                        <option value="Amarela" {% if fase3.cor_raca == 'Amarela' %}selected{% endif %}>Amarela</option>
+                        <option value="Oriental" {% if fase3.cor_raca == 'Oriental' %}selected{% endif %}>Oriental</option>
+                        <option value="Indígena" {% if fase3.cor_raca == 'Indígena' %}selected{% endif %}>Indígena</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Bairro ou Comunidade -->
+            <div class="form-group">
+                <label for="bairro_comunidade_rural">Você considera que mora em bairro, comunidade, área rural ou local de risco de violência?</label>
+                <div class="field">
+                    <select id="bairro_comunidade_rural" name="bairro_comunidade_rural">
+                        <option value="" {% if fase3.bairro_comunidade_rural == '' %}selected{% endif %}>Selecione</option>
+                        <option value="Sim" {% if fase3.bairro_comunidade_rural == 'Sim' %}selected{% endif %}>Sim</option>
+                        <option value="Não" {% if fase3.bairro_comunidade_rural == 'Não' %}selected{% endif %}>Não</option>
+                        <option value="Não Sei" {% if fase3.bairro_comunidade_rural == 'Não Sei' %}selected{% endif %}>Não Sei</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Situação de Moradia -->
+            <div class="form-group">
+                <label for="situacao_moradia">Qual sua situação de moradia?</label>
+                <div class="field">
+                    <select id="situacao_moradia" name="situacao_moradia">
+                        <option value="" {% if fase3.situacao_moradia == '' %}selected{% endif %}>Selecione</option>
+                        <option value="Própria" {% if fase3.situacao_moradia == 'Própria' %}selected{% endif %}>Própria</option>
+                        <option value="Alugada" {% if fase3.situacao_moradia == 'Alugada' %}selected{% endif %}>Alugada</option>
+                        <option value="Cedida" {% if fase3.situacao_moradia == 'Cedida' %}selected{% endif %}>Cedida</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Moradia Cedida -->
+            <div class="form-group">
+                <label for="moradia_cedida">Em caso de moradia cedida, especificar a seguir por quem. Caso contrário, preencher com 'Não se Aplica'.</label>
+                <input type="text" name="moradia_cedida" id="moradia_cedida" value="{{ fase3.moradia_cedida }}">
+            </div>
+
+            <!-- Dependência Financeira -->
+            <div class="form-group">
+                <label for="dependente_financeiramente">Você se considera dependente financeiramente do(a) agressor(a)?</label>
+                <div class="field">
+                    <select id="dependente_financeiramente" name="dependente_financeiramente">
+                        <option value="" {% if fase3.dependente_financeiramente == '' %}selected{% endif %}>Selecione</option>
+                        <option value="Sim" {% if fase3.dependente_financeiramente == 'Sim' %}selected{% endif %}>Sim</option>
+                        <option value="Não" {% if fase3.dependente_financeiramente == 'Não' %}selected{% endif %}>Não</option>
+                        <option value="Não Sei" {% if fase3.dependente_financeiramente == 'Não Sei' %}selected{% endif %}>Não Sei</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Abrigamento Temporário -->
+            <div class="form-group">
+                <label for="abrigamento_temporario">Você quer e aceita abrigamento temporário?</label>
+                <div class="field">
+                    <select id="abrigamento_temporario" name="abrigamento_temporario">
+                        <option value="" {% if fase3.abrigamento_temporario == '' %}selected{% endif %}>Selecione</option>
+                        <option value="Sim" {% if fase3.abrigamento_temporario == 'Sim' %}selected{% endif %}>Sim</option>
+                        <option value="Não" {% if fase3.abrigamento_temporario == 'Não' %}selected{% endif %}>Não</option>
+                        <option value="Não Sei" {% if fase3.abrigamento_temporario == 'Não Sei' %}selected{% endif %}>Não Sei</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Informações Benefícios -->
+            <div class="form-group">
+                <label for="informacoes_beneficios">Deseja receber informações sobre benefícios sociais?</label>
+                <div class="field">
+                    <select id="informacoes_beneficios" name="informacoes_beneficios">
+                        <option value="" {% if fase3.informacoes_beneficios == '' %}selected{% endif %}>Selecione</option>
+                        <option value="Sim, totalmente" {% if fase3.informacoes_beneficios == 'Sim, totalmente' %}selected{% endif %}>Sim, totalmente</option>
+                        <option value="Sim, parcialmente. Tem emprego mas não se autosustenta" {% if fase3.informacoes_beneficios == 'Sim, parcialmente. Tem emprego mas não se autosustenta' %}selected{% endif %}>Sim, parcialmente. Tem emprego mas não se autosustenta</option>
+                        <option value="Não. Tenho emprego e consigo me sustentar" {% if fase3.informacoes_beneficios == 'Não. Tenho emprego e consigo me sustentar' %}selected{% endif %}>Não. Tenho emprego e consigo me sustentar</option>
+                        <option value="Não se Aplica" {% if fase3.informacoes_beneficios == 'Não se Aplica' %}selected{% endif %}>Não se Aplica</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Dependentes -->
+            <div class="form-group">
+                <label for="dependentes_nome_idade">Informe abaixo o nome e a idade dos dependentes que estarão neste termo juntamente com a Requerente.</label>
+                <input type="text" name="dependentes_nome_idade" id="dependentes_nome_idade" value="{{ fase3.dependentes_nome_idade }}">
+            </div>
+
+            <!-- Natureza dos Crimes -->
+            <div class="form-group">
+                <label for="natureza_dos_crimes">Natureza dos Crimes</label>
+                <input type="text" name="natureza_dos_crimes" id="natureza_dos_crimes" value="{{ fase3.natureza_dos_crimes }}">
+            </div>
+
+            <!-- Advogado ou Defensor -->
+            <div class="form-group">
+                <label for="advogado_ou_defensor">Advogado ou Defensor</label>
+                <input type="text" name="advogado_ou_defensor" id="advogado_ou_defensor" value="{{ fase3.advogado_ou_defensor }}">
+            </div>
+
+            <!-- Como soube do serviço -->
+            <div class="form-group">
+                <label for="como_soube">Como você soube desse serviço da Delegacia Virtual e da Medida Protetiva?</label>
+                <div class="field">
+                    <div class="dropdown">
+                        <div class="dropdown-label">Selecione como soube desse serviço</div>
+                        <div class="dropdown-content">
+                            <label><input type="checkbox" name="como_soube" value="TV" /> TV</label>
+                            <label><input type="checkbox" name="como_soube" value="Internet" /> Internet</label>
+                            <label><input type="checkbox" name="como_soube" value="Rádio" /> Rádio</label>
+                            <label><input type="checkbox" name="como_soube" value="Amigos" /> Amigos</label>
+                            <label><input type="checkbox" name="como_soube" value="Familiares" /> Familiares</label>
+                            <label><input type="checkbox" name="como_soube" value="Um Policial de Outra Delegacia" /> Um Policial de Outra Delegacia</label>
+                            <label><input type="checkbox" name="como_soube" value="CRAS" /> CRAS</label>
+                            <label><input type="checkbox" name="como_soube" value="CREAS" /> CREAS</label>
+                            <label><input type="checkbox" name="como_soube" value="CRAMS" /> CRAMS</label>
+                            <label><input type="checkbox" name="como_soube" value="Não Houve Sucesso no Contato com a Requerente" /> Não Houve Sucesso no Contato com a Requerente</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delegacia de Busca -->
+            <div class="form-group">
+                <label for="delegacia_busca_informacao">Você esteve em outra Delegacia buscando informações, antes de registrar essa comunicação na Delegacia Virtual?</label>
+                <div class="field">
+                    <select id="delegacia_busca_informacao" name="delegacia_busca_informacao">
+                        <option value="" {% if fase3.delegacia_busca_informacao == '' %}selected{% endif %}>Selecione</option>
+                        <option value="Sim, da minha cidade" {% if fase3.delegacia_busca_informacao == 'Sim, da minha cidade' %}selected{% endif %}>Sim, da minha cidade</option>
+                        <option value="Sim, outra delegacia e me encaminharam" {% if fase3.delegacia_busca_informacao == 'Sim, outra delegacia e me encaminharam' %}selected{% endif %}>Sim, outra delegacia e me encaminharam</option>
+                        <option value="Não" {% if fase3.delegacia_busca_informacao == 'Não' %}selected{% endif %}>Não</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Especificar Delegacia -->
+            <div class="form-group">
+                <label for="especificar_delegacia">Especifique a Delegacia</label>
+                <textarea name="especificar_delegacia" id="especificar_delegacia">{{ fase3.especificar_delegacia }}</textarea>
+            </div>
+
+            <!-- Ajuda no Registro -->
+            <div class="form-group">
+                <label for="ajuda_registro">Alguém lhe ajudou a registrar essa comunicação e preencher os formulários?</label>
+                <div class="field">
+                    <select id="ajuda_registro" name="ajuda_registro">
+                        <option value="" {% if fase3.ajuda_registro == '' %}selected{% endif %}>Selecione</option>
+                        <option value="Sim, no formulário de risco" {% if fase3.ajuda_registro == 'Sim, no formulário de risco' %}selected{% endif %}>Sim, no formulário de risco</option>
+                        <option value="Sim, na MPU" {% if fase3.ajuda_registro == 'Sim, na MPU' %}selected{% endif %}>Sim, na MPU</option>
+                        <option value="Sim, em ambos (Formulário e MPU)" {% if fase3.ajuda_registro == 'Sim, em ambos (Formulário e MPU)' %}selected{% endif %}>Sim, em ambos (Formulário e MPU)</option>
+                        <option value="Não" {% if fase3.ajuda_registro == 'Não' %}selected{% endif %}>Não</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Atendimento Psicológico -->
+            <div class="form-group">
+                <label for="atendimento_psicologico">A vítima recebe ou gostaria de receber atendimento psicológico?</label>
+                <div class="field">
+                    <select id="atendimento_psicologico" name="atendimento_psicologico">
+                        <option value="" {% if fase3.atendimento_psicologico == '' %}selected{% endif %}>Selecione</option>
+                        <option value="SIM - a vítima gostaria de encaminhamento para atendimento psicológico" {% if fase3.atendimento_psicologico == 'SIM - a vítima gostaria de encaminhamento para atendimento psicológico' %}selected{% endif %}>
+                            SIM - a vítima gostaria de encaminhamento para atendimento psicológico
+                        </option>
+                        <option value="SIM - a vítima faz uso de medicamentos para depressão, ansiedade ou tratamentos psíquicos" {% if fase3.atendimento_psicologico == 'SIM - a vítima faz uso de medicamentos para depressão, ansiedade ou tratamentos psíquicos' %}selected{% endif %}>
+                            SIM - a vítima faz uso de medicamentos para depressão, ansiedade ou tratamentos psíquicos
+                        </option>
+                        <option value="Não Quero" {% if fase3.atendimento_psicologico == 'Não Quero' %}selected{% endif %}>Não Quero</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Telefone e Endereço -->
+            <div class="form-group">
+                <label for="telefone_endereco_whatsapp">Passar telefone e endereços no WhatsApp da vítima com as regras e procedimentos</label>
+                <textarea name="telefone_endereco_whatsapp" id="telefone_endereco_whatsapp">{{ fase3.telefone_endereco_whatsapp }}</textarea>
+            </div>
+
+            <!-- Atendimento Médico -->
+            <div class="form-group">
+                <label for="atendimento_medico_vitima">A vítima gostaria de receber atendimento médico?</label>
+                <div class="field">
+                    <select id="atendimento_medico_vitima" name="atendimento_medico_vitima">
+                        <option value="" {% if fase3.atendimento_medico_vitima == '' %}selected{% endif %}>Selecione</option>
+                        <option value="SIM - a vítima gostaria de encaminhamento para atendimento médico/hospitalar" {% if fase3.atendimento_medico_vitima == 'SIM - a vítima gostaria de encaminhamento para atendimento médico/hospitalar' %}selected{% endif %}>
+                            SIM - a vítima gostaria de encaminhamento para atendimento médico/hospitalar
+                        </option>
+                        <option value="NÃO - preciso de encaminhamento médico" {% if fase3.atendimento_medico_vitima == 'NÃO - preciso de encaminhamento médico' %}selected{% endif %}>
+                            NÃO - preciso de encaminhamento médico
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Reataram Relacionamento -->
+            <div class="form-group">
+                <label for="reataram_relacionamento">Quantas vezes reataram o relacionamento após essas brigas?</label>
+                <div class="field">
+                    <select id="reataram_relacionamento" name="reataram_relacionamento">
+                        <option value="" {% if fase3.reataram_relacionamento == '' %}selected{% endif %}>Selecione</option>
+                        <option value="Sim - uma vez" {% if fase3.reataram_relacionamento == 'Sim - uma vez' %}selected{% endif %}> Sim - uma vez</option>
+                        <option value="Sim - duas vezes" {% if fase3.reataram_relacionamento == 'Sim - duas vezes' %}selected{% endif %}> Sim - duas vezes</option>
+                        <option value="Sim - várias vezes" {% if fase3.reataram_relacionamento == 'Sim - várias vezes' %}selected{% endif %}> Sim - várias vezes</option>
+                        <option value="Não - essa foi a primeira vez que terminamos por esse motivo" {% if fase3.reataram_relacionamento == 'Não - essa foi a primeira vez que terminamos por esse motivo' %}selected{% endif %}> Não - essa foi a primeira vez que terminamos por esse motivo</option>
+                        <option value="Nunca houve separação" {% if fase3.reataram_relacionamento == 'Nunca houve separação' %}selected{% endif %}> Nunca houve separação</option>
+                        <option value="Não Houve Retorno" {% if fase3.reataram_relacionamento == 'Não Houve Retorno' %}selected{% endif %}> Não Houve Retorno</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Motivos do Retorno -->
+            <div class="form-group">
+                <label for="motivos_retorno">Quais os motivos do retorno?</label>
+                <div class="field">
+                    <div class="dropdown">
+                        <div class="dropdown-label">Selecione os motivos do retorno</div>
+                        <div class="dropdown-content">
+                            <label><input type="checkbox" name="motivos_retorno" value="Não tem familiar no estado" /> Não tem familiar no estado</label>
+                            <label><input type="checkbox" name="motivos_retorno" value="Filhos pediram para voltar" /> Filhos pediram para voltar</label>
+                            <label><input type="checkbox" name="motivos_retorno" value="Dependência financeira" /> Dependência financeira</label>
+                            <label><input type="checkbox" name="motivos_retorno" value="Agressor pediu e prometeu mudar" /> Agressor pediu e prometeu mudar</label>
+                            <label><input type="checkbox" name="motivos_retorno" value="Ameaças, perseguições e agressões" /> Ameaças, perseguições e agressões</label>
+                            <label><input type="checkbox" name="motivos_retorno" value="Dependência emocional" /> Dependência emocional</label>
+                            <label><input type="checkbox" name="motivos_retorno" value="Não sabe explicar" /> Não sabe explicar</label>
+                            <label><input type="checkbox" name="motivos_retorno" value="Não Houve Retorno" /> Não Houve Retorno</label>
+                            <label><input type="checkbox" name="motivos_retorno" value="Nunca Houve Separação" /> Nunca Houve Separação</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agressão Relacionamento Anterior -->
+            <div class="form-group">
+                <label for="agressao_relacionamento">A vítima já sofreu agressões de relacionamento anterior?</label>
+                <div class="field">
+                    <select id="agressao_relacionamento" name="agressao_relacionamento">
+                        <option value="" {% if fase3.agressao_relacionamento == '' %}selected{% endif %}>Selecione</option>
+                        <option value="Sim" {% if fase3.agressao_relacionamento == 'Sim' %}selected{% endif %}>Sim</option>
+                        <option value="Não" {% if fase3.agressao_relacionamento == 'Não' %}selected{% endif %}>Não</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Alteração de Informações -->
+            <div class="form-group">
+                <label for="alteracao_informacoes">A equipe necessitou COMPLEMENTAR ou ALTERAR as informações inseridas na DEVIR no FONAR ou na MPU?</label>
+                <div class="field">
+                    <select id="alteracao_informacoes" name="alteracao_informacoes">
+                        <option value="" {% if fase3.alteracao_informacoes == '' %}selected{% endif %}>Selecione</option>
+                        <option value="Sim - na DEVIR" {% if fase3.alteracao_informacoes == 'Sim - na DEVIR' %}selected{% endif %}>Sim - na DEVIR</option>
+                        <option value="Sim - apenas no FORMULÁRIO DE RISCO" {% if fase3.alteracao_informacoes == 'Sim - apenas no FORMULÁRIO DE RISCO' %}selected{% endif %}>Sim - apenas no FORMULÁRIO DE RISCO</option>
+                        <option value="Sim - apenas MPU" {% if fase3.alteracao_informacoes == 'Sim - apenas MPU' %}selected{% endif %}>Sim - apenas MPU</option>
+                        <option value="Sim - em ambos (FORMULÁRIO E MPU)" {% if fase3.alteracao_informacoes == 'Sim - em ambos (FORMULÁRIO E MPU)' %}selected{% endif %}>Sim - em ambos (FORMULÁRIO E MPU)</option>
+                        <option value="Não" {% if fase3.alteracao_informacoes == 'Não' %}selected{% endif %}>Não</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Data e Hora do Atendimento Fase 3 -->
+            <div class="form-group">
+                <label for="data_hora_fase3">Data e Hora do Atendimento Fase 3</label>
+                <input type="datetime-local" name="data_hora_fase3" id="data_hora_fase3" value="{{ fase3.data_hora_fase3|date:'Y-m-d\TH:i' }}">
+            </div>
+
+            <!-- Policial Responsável pela Finalização -->
+            <div class="form-group">
+                <label for="policial_responsavel">Policial responsável pela finalização da fase 3</label>
+                <div class="field">
+                    <select id="policial_responsavel" name="policial_responsavel">
+                        <option value="" {% if fase3.policial_responsavel == '' %}selected{% endif %}>Selecione</option>
+                        <option value="MARIA NAZARÉ" {% if fase3.policial_responsavel == 'MARIA NAZARÉ' %}selected{% endif %}>MARIA NAZARÉ</option>
+                        <option value="DANIELLA PORTO" {% if fase3.policial_responsavel == 'DANIELLA PORTO' %}selected{% endif %}>DANIELLA PORTO</option>
+                        <option value="PAULA TIMBÓ" {% if fase3.policial_responsavel == 'PAULA TIMBÓ' %}selected{% endif %}>PAULA TIMBÓ</option>
+                        <option value="THAYSA ALBUQUERQUE" {% if fase3.policial_responsavel == 'THAYSA ALBUQUERQUE' %}selected{% endif %}>THAYSA ALBUQUERQUE</option>
+                        <option value="YASMIM CRISTINA" {% if fase3.policial_responsavel == 'YASMIM CRISTINA' %}selected{% endif %}>YASMIM CRISTINA</option>
+                        <option value="AMANDA NASCIMENTO" {% if fase3.policial_responsavel == 'AMANDA NASCIMENTO' %}selected{% endif %}>AMANDA NASCIMENTO</option>
+                        <option value="PAULA WILTSHIRE" {% if fase3.policial_responsavel == 'PAULA WILTSHIRE' %}selected{% endif %}>PAULA WILTSHIRE</option>
+                        <option value="CARINA QUEIROZ" {% if fase3.policial_responsavel == 'CARINA QUEIROZ' %}selected{% endif %}>CARINA QUEIROZ</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Observações -->
+            <div class="form-group">
+                <label for="observacoes">Observações</label>
+                <textarea name="observacoes" id="observacoes">{{ fase3.observacoes }}</textarea>
+            </div>
+
+            <!-- Status da Fase 3 -->
+            <div class="form-group">
+                <label for="status_fase">Status da fase 3</label>
+                <div class="field">
+                    <select id="status_fase" name="status_fase">
+                        <option value="" {% if fase3.status_fase == '' %}selected{% endif %}>Selecione</option>
+                        <option value="Em Andamento" {% if fase3.status_fase == 'Em Andamento' %}selected{% endif %}>Em Andamento</option>
+                        <option value="Concluída" {% if fase3.status_fase == 'Concluída' %}selected{% endif %}>Concluída</option>
+                        <option value="Desistência na Fase 3" {% if fase3.status_fase == 'Desistência na Fase 3' %}selected{% endif %}>Desistência na Fase 3</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" name="fase" value="fase3" class="submit-btn">Salvar Alterações Fase 3</button>
+
+        </form>
+    </div>
+
+    <!-- Aba Fase 4 --------------------------------------------------------------------------------------------------->
+    <div id="fase-4" class="tab-content">
+        <h3>Detalhes da Fase 4</h3>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Número do Protocolo DEVIR -->
+            <div class="form-group">
+                <label for="protocolo">Número do Protocolo DEVIR</label>
+                <input type="text" name="protocolo" id="protocolo" value="{{ fase4.protocolo }}" readonly>
+            </div>
+
+            <!-- Data e Hora do Atendimento Fase 4 -->
+            <div class="form-group">
+                <label for="data_atendimento_fase4">Data e Hora do Atendimento Fase 4</label>
+                <input type="datetime-local" name="data_atendimento_fase4" id="data_atendimento_fase4" value="{{ fase4.data_atendimento_fase4|date:'Y-m-d\TH:i' }}">
+            </div>
+
+            <!-- Policial Responsável pela Finalização da Fase 4 -->
+            <div class="form-group">
+                <label for="policial_finalizacao_fase4">Policial Responsável pela Finalização da Fase 4</label>
+                <div class="field">
+                    <select name="policial_finalizacao_fase4" id="policial_finalizacao_fase4" required>
+                        <option value="" {% if fase4.policial_finalizacao_fase4 == '' %}selected{% endif %}>Selecione</option>
+                        <option value="MARIA NAZARÉ" {% if fase4.policial_finalizacao_fase4 == 'MARIA NAZARÉ' %}selected{% endif %}>MARIA NAZARÉ</option>
+                        <option value="DANIELLA PORTO" {% if fase4.policial_finalizacao_fase4 == 'DANIELLA PORTO' %}selected{% endif %}>DANIELLA PORTO</option>
+                        <option value="PAULA TIMBÓ" {% if fase4.policial_finalizacao_fase4 == 'PAULA TIMBÓ' %}selected{% endif %}>PAULA TIMBÓ</option>
+                        <option value="THAYSA ALBUQUERQUE" {% if fase4.policial_finalizacao_fase4 == 'THAYSA ALBUQUERQUE' %}selected{% endif %}>THAYSA ALBUQUERQUE</option>
+                        <option value="YASMIM CRISTINA" {% if fase4.policial_finalizacao_fase4 == 'YASMIM CRISTINA' %}selected{% endif %}>YASMIM CRISTINA</option>
+                        <option value="AMANDA NASCIMENTO" {% if fase4.policial_finalizacao_fase4 == 'AMANDA NASCIMENTO' %}selected{% endif %}>AMANDA NASCIMENTO</option>
+                        <option value="PAULA WILTSHIRE" {% if fase4.policial_finalizacao_fase4 == 'PAULA WILTSHIRE' %}selected{% endif %}>PAULA WILTSHIRE</option>
+                        <option value="CARINA QUEIROZ" {% if fase4.policial_finalizacao_fase4 == 'CARINA QUEIROZ' %}selected{% endif %}>CARINA QUEIROZ</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- A vítima Representou Criminalmente? -->
+            <div class="form-group">
+                <label for="representou_crime">A vítima Representou Criminalmente?</label>
+                <div class="field">
+                    <select name="representou_crime" id="representou_crime" required>
+                        <option value="" {% if fase4.representou_crime == '' %}selected{% endif %}>Selecione</option>
+                        <option value="Sim" {% if fase4.representou_crime == 'Sim' %}selected{% endif %}>Sim</option>
+                        <option value="Não" {% if fase4.representou_crime == 'Não' %}selected{% endif %}>Não</option>
+                        <option value="Ação Incondicionada" {% if fase4.representou_crime == 'Ação Incondicionada' %}selected{% endif %}>Ação Incondicionada</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- A vítima já Sofreu Agressões de Outro Agressor? -->
+            <div class="form-group">
+                <label for="agressao">A vítima já Sofreu Agressões de Outro Agressor?</label>
+                <div class="field">
+                    <select name="agressao" id="agressao" required>
+                        <option value="" {% if fase4.agressao == '' %}selected{% endif %}>Selecione</option>
+                        <option value="Sim" {% if fase4.agressao == 'Sim' %}selected{% endif %}>Sim</option>
+                        <option value="Não" {% if fase4.agressao == 'Não' %}selected{% endif %}>Não</option>
+                        <option value="Prejudicado" {% if fase4.agressao == 'Prejudicado' %}selected{% endif %}>Prejudicado</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Situação da MPU -->
+            <div class="form-group">
+                <label for="situacao_mpu">Situação da MPU</label>
+                <div class="field">
+                    <select name="situacao_mpu" id="situacao_mpu" required>
+                        <option value="" {% if fase4.situacao_mpu == '' %}selected{% endif %}>Selecione</option>
+                        <option value="Deferida" {% if fase4.situacao_mpu == 'Deferida' %}selected{% endif %}>Deferida</option>
+                        <option value="Indeferida" {% if fase4.situacao_mpu == 'Indeferida' %}selected{% endif %}>Indeferida</option>
+                        <option value="Não Enviada ao TJ" {% if fase4.situacao_mpu == 'Não Enviada ao TJ' %}selected{% endif %}>Não Enviada ao TJ</option>
+                        <option value="Declarou-se Incompetente" {% if fase4.situacao_mpu == 'Declarou-se Incompetente' %}selected{% endif %}>Declarou-se Incompetente</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Data da Concessão da MPU -->
+            <div class="form-group">
+                <label for="data_concessao_mpu">Data da Concessão da MPU</label>
+                <input type="date" name="data_concessao_mpu" id="data_concessao_mpu" value="{{ fase4.data_concessao_mpu|date:'Y-m-d' }}">
+            </div>
+
+            <!-- MPU foi Enviado ao TJ? -->
+            <div class="form-group">
+                <label for="mpu_enviado_ao_tj">MPU foi Enviado ao TJ?</label>
+                <div class="field">
+                    <select name="mpu_enviado_ao_tj" id="mpu_enviado_ao_tj" required>
+                        <option value="" {% if fase4.mpu_enviado_ao_tj == '' %}selected{% endif %}>Selecione</option>
+                        <option value="Sem Vídeo" {% if fase4.mpu_enviado_ao_tj == 'Sem Vídeo' %}selected{% endif %}>Sem Vídeo</option>
+                        <option value="Com Vídeo" {% if fase4.mpu_enviado_ao_tj == 'Com Vídeo' %}selected{% endif %}>Com Vídeo</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Número do Processo Proteção e Nº do Protocolo -->
+            <div class="form-group">
+                <label for="numero_processo_protecao">Número do Processo Proteção e Nº do Protocolo</label>
+                <input type="text" name="numero_processo_protecao" id="numero_processo_protecao" value="{{ fase4.numero_processo_protecao }}">
+            </div>
+
+            <!-- Observações -->
+            <div class="form-group">
+                <label for="observacoes">Observações</label>
+                <textarea name="observacoes" id="observacoes">{{ fase4.observacoes }}</textarea>
+            </div>
+
+            <!-- Status da Fase 4 -->
+            <div class="form-group">
+                <label for="status_fase">Status da Fase 4</label>
+                <div class="field">
+                    <select name="status_fase" id="status_fase" required>
+                        <option value="" {% if fase4.status_fase == '' %}selected{% endif %}>Selecione</option>
+                        <option value="Em Andamento" {% if fase4.status_fase == 'Em Andamento' %}selected{% endif %}>Em Andamento</option>
+                        <option value="Concluída" {% if fase4.status_fase == 'Concluída' %}selected{% endif %}>Concluída</option>
+                        <option value="Desistência na Fase 4" {% if fase4.status_fase == 'Desistência na Fase 4' %}selected{% endif %}>Desistência na Fase 4</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" name="fase" value="fase4" class="submit-btn">Salvar Alterações Fase 4</button>
+        </form>
+    </div>
+
+    <button class="submit-btn" onclick="window.location.href='{% url 'Sistema_Poly:menu' %}'">Voltar ao Menu Principal</button>
+
+    <script>
+        // Função para mostrar/alternar as abas
+        function showTab(fase) {
+            // Esconde todas as abas
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Destaca a aba ativa
+            const tabsLinks = document.querySelectorAll('.tab');
+            tabsLinks.forEach(link => link.classList.remove('active'));
+
+            // Mostra a aba selecionada
+            document.getElementById('fase-' + fase).classList.add('active');
+            tabsLinks[fase - 1].classList.add('active');
+        }
+
+        // Função para abrir e fechar o dropdown
+        document.querySelectorAll('.dropdown-label').forEach(function(dropdownLabel) {
+            dropdownLabel.addEventListener('click', function() {
+                this.parentNode.classList.toggle('open');
+            });
+        });
+
+        // Exibe a primeira aba por padrão
+        showTab(1);
+    </script>
+
+</body>
+</html>

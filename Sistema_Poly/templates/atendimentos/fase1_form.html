@@ -1,0 +1,554 @@
+{% load static %}
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Fase 1</title>
+    <link rel="stylesheet" href="{% static 'atendimentos/styles.css' %}">
+    <!-- Font Awesome para os ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            position: relative;
+            min-height: 100vh; /* Garante que a página ocupe toda a altura da tela */
+            margin: 0;
+            background-image: url("{% static 'atendimentos/POLY.png' %}"); /* Imagem de fundo */
+            background-size: cover; /* Faz a imagem cobrir toda a área disponível */
+            background-position: center; /* Centraliza a imagem */
+            background-attachment: fixed; /* A imagem de fundo não se move ao rolar */
+        }
+
+        /* Container principal */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.2); /* Totalmente transparente */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            color: black; /* Cor do texto dentro do container */
+            font-weight: bold; /* Cor do texto em negrito */
+        }
+
+        /* Título do container */
+        h1 {
+            text-align: center;
+            color: black;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        /* Estilo das perguntas e labels */
+        .form-group label {
+            width: 250px;
+            text-align: left;
+            color: black;
+            font-weight: bold; /* Letra em negrito nas perguntas */
+        }
+
+        /* Estilo para os campos de resposta */
+        .container input,
+        .container textarea,
+        .container select {
+            background-color: rgba(255, 255, 255, 0.0); /* Transparente */
+            color: black;  /* Cor do texto */
+            border: 1px solid black; /* Borda sutil e transparente */
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            width: 100%; /* Faz o campo de entrada ocupar toda a largura disponível */
+        }
+
+        /* Estilo para o campo <select> */
+        .container select {
+            appearance: none; /* Remove a aparência padrão do select */
+            -webkit-appearance: none; /* Para o Safari */
+            -moz-appearance: none; /* Para o Firefox */
+        }
+
+        /* Estilo para as opções dentro do <select> */
+        .container select option {
+            background-color: rgba(0, 0, 0, 0.0); /* Cor de fundo das opções */
+            color: black;  /* Cor do texto das opções */
+        }
+
+        /* Foco no campo de entrada, textarea e select */
+        .container input:focus,
+        .container textarea:focus,
+        .container select:focus {
+            border-color: rgba(255, 255, 255, 0.5); /* Cor da borda quando em foco */
+            outline: none; /* Remove o contorno padrão */
+        }
+
+        /* Estilo do botão de envio */
+        .submit-btn {
+            padding: 10px 20px;
+            background-color: rgba(76, 175, 80, 0.5); /* Transparência aplicada */
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        /* Estilo de hover do botão de envio */
+        .submit-btn:hover {
+            background-color: rgba(69, 160, 73, 0.8); /* Transparência aplicada ao hover */
+        }
+
+        /* Estilos para os botões no canto superior esquerdo */
+        .button-container {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            display: flex;            /* Flex para alinhar os botões lado a lado */
+            flex-direction: row;      /* Coloca os botões em linha */
+            gap: 10px;                /* Espaçamento entre os botões */
+        }
+
+        .button-container a {
+            background-color: #007bff; /* Cor do fundo com transparência */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 8px; /* Bordas arredondadas */
+            transition: background-color 0.3s, transform 0.3s; /* Animação suave */
+            text-align: center;
+            display: inline-block;
+            line-height: 1.5;
+        }
+
+        .button-container a:hover {
+            background-color: rgba(0, 86, 179, 0.8); /* Cor de fundo ao passar o mouse */
+            transform: scale(1.05); /* Aumenta o tamanho ao passar o mouse */
+        }
+
+        .button-container i {
+            margin-right: 8px; /* Espaçamento entre o ícone e o texto */
+        }
+
+        .button-container a {
+            text-decoration: none; /* Remove o sublinhado */
+        }
+
+        /* Estilos para os botões fora do container (botões fixos na lateral) */
+        .action-buttons {
+            position: fixed;
+            top: 50%;  /* Centraliza verticalmente na tela */
+            right: 70px; /* Ajuste a distância do botão à direita */
+            transform: translateY(-50%); /* Centraliza o botão verticalmente */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        /* Estilo para todos os botões fora do container (mesma cor e animação) */
+        .action-buttons a, .action-buttons button {
+            background-color: rgba(0, 123, 255, 0.8);
+            color: white; /* Cor do texto (branco) */
+            border: none;
+            padding: 12px 0;  /* Tamanho fixo vertical */
+            width: 200px;     /* Largura fixa */
+            margin: 10px 0;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 15px; /* Bordas arredondadas */
+            transition: background-color 0.3s, transform 0.3s; /* Adicionando transição para animação */
+            text-align: center;  /* Garante o texto centralizado */
+            display: inline-block; /* Garante que o link tenha o mesmo comportamento de um botão */
+            line-height: 1.5; /* Controla a altura do texto dentro do botão */
+        }
+
+        /* Efeito ao passar o mouse sobre o botão */
+        .action-buttons a:hover, .action-buttons button:hover {
+            background-color: rgba(23, 76, 115, 0.8); /* Azul mais escuro com 80% de opacidade ao passar o mouse */
+            transform: scale(1.05); /* Leve aumento de tamanho ao passar o mouse */
+        }
+
+        /* Remover sublinhado dos links (para os títulos dos botões fora do container) */
+        .action-buttons a {
+            text-decoration: none; /* Remover o sublinhado dos links */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cadastrar Fase 1</h1>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Pergunta: Nome Completo da Vítima -->
+            <div class="form-group">
+                <label for="{{ form.nome_completo.id_for_label }}">Nome Completo da Vítima</label>
+                <div class="field">
+                    {{ form.nome_completo }}
+                </div>
+            </div>
+
+            <!-- Pergunta: CPF -->
+            <div class="form-group">
+                <label for="{{ form.cpf.id_for_label }}">CPF</label>
+                <div class="field">
+                    <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" oninput="mascaraCPF(this)" maxlength="14">
+                </div>
+            </div>
+
+            <!-- Pergunta: Idade -->
+            <div class="form-group">
+                <label for="{{ form.idade.id_for_label }}">Idade</label>
+                <div class="field">
+                    {{ form.idade }}
+                </div>
+            </div>
+
+            <!-- Pergunta: Telefone -->
+            <div class="form-group">
+                <label for="{{ form.telefone.id_for_label }}">Telefone</label>
+                <div class="field">
+                    <input type="text" id="telefone" name="telefone" placeholder="(00) 00000-0000" oninput="mascaraTelefone(this)" maxlength="15">
+                </div>
+            </div>
+
+            <!-- Pergunta: Bairro -->
+            <div class="form-group">
+                <label for="{{ form.bairro.id_for_label }}">Bairro</label>
+                <div class="field">
+                    {{ form.bairro }}
+                </div>
+            </div>
+
+            <!-- Pergunta: Cidade -->
+            <div class="form-group">
+                <label for="{{ form.cidade.id_for_label }}">Cidade</label>
+                <div class="field">
+                    {{ form.cidade }}
+                </div>
+            </div>
+
+            <!-- Pergunta: Estado -->
+            <div class="form-group">
+                <label for="{{ form.estado.id_for_label }}">Estado</label>
+                <div class="field">
+                    <select name="estado" id="estado">
+                        <option value="" selected>Selecione</option>
+                        <option value="AC">AC</option>
+                        <option value="AL">AL</option>
+                        <option value="AP">AP</option>
+                        <option value="AM">AM</option>
+                        <option value="BA">BA</option>
+                        <option value="CE">CE</option>
+                        <option value="DF">DF</option>
+                        <option value="ES">ES</option>
+                        <option value="GO">GO</option>
+                        <option value="MA">MA</option>
+                        <option value="MT">MT</option>
+                        <option value="MS">MS</option>
+                        <option value="MG">MG</option>
+                        <option value="PA">PA</option>
+                        <option value="PB">PB</option>
+                        <option value="PR">PR</option>
+                        <option value="PE">PE</option>
+                        <option value="PI">PI</option>
+                        <option value="RJ">RJ</option>
+                        <option value="RN">RN</option>
+                        <option value="RS">RS</option>
+                        <option value="RO">RO</option>
+                        <option value="RR">RR</option>
+                        <option value="SC">SC</option>
+                        <option value="SP">SP</option>
+                        <option value="SE">SE</option>
+                        <option value="TO">TO</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Pergunta: Número do Protocolo DEVIR -->
+            <div class="form-group">
+                <label for="{{ form.protocolo.id_for_label }}">Número do Protocolo DEVIR</label>
+                <div class="field">
+                    <input type="text" id="protocolo" name="protocolo" placeholder="0000/0000000000-0" oninput="mascaraProtocolo(this)" maxlength="17">
+                </div>
+            </div>
+
+            <!-- Pergunta: Data e Hora da Validação -->
+            <div class="form-group">
+                <label for="{{ form.validacao_dev.id_for_label }}">Data e Hora da Validação</label>
+                <div class="field">
+                    <input type="datetime-local" id="validacao_dev" name="validacao_dev" value="{{ form.validacao_dev.value|date:'Y-m-d\TH:i' }}">
+                </div>
+            </div>
+
+            <!-- Pergunta: Policial Responsável pela Validação -->
+            <div class="form-group">
+                <label for="{{ form.policial_validacao.id_for_label }}">Policial Responsável pela Validação</label>
+                <div class="field">
+                    <select name="policial_validacao" id="policial_validacao">
+                        <option value="" selected>Selecione</option>
+                        <option value="MARIA NAZARÉ">MARIA NAZARÉ</option>
+                        <option value="DANIELLA PORTO">DANIELLA PORTO</option>
+                        <option value="PAULA TIMBÓ">PAULA TIMBÓ</option>
+                        <option value="THAYSA ALBUQUERQUE">THAYSA ALBUQUERQUE</option>
+                        <option value="YASMIM CRISTINA">YASMIM CRISTINA</option>
+                        <option value="AMANDA NASCIMENTO">AMANDA NASCIMENTO</option>
+                        <option value="PAULA WILTSHIRE">PAULA WILTSHIRE</option>
+                        <option value="CARINA QUEIROZ">CARINA QUEIROZ</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Pergunta: Data e Hora do Registro -->
+            <div class="form-group">
+                <label for="{{ form.registro_comunicacao.id_for_label }}">Data e Hora do Registro</label>
+                <div class="field">
+                    <input type="datetime-local" id="registro_comunicacao" name="registro_comunicacao" value="{{ form.registro_comunicacao.value|date:'Y-m-d\TH:i' }}">
+                </div>
+            </div>
+
+            <!-- Pergunta: Data e Hora do Fato -->
+            <div class="form-group">
+                <label for="{{ form.data_fato.id_for_label }}">Data e Hora do Fato</label>
+                <div class="field">
+                    <input type="datetime-local" id="data_fato" name="data_fato" value="{{ form.data_fato.value|date:'Y-m-d\TH:i' }}">
+                </div>
+            </div>
+
+            <!-- Pergunta: Natureza -->
+            <div class="form-group">
+                <label for="{{ form.natureza.id_for_label }}">Natureza</label>
+                <div class="field">
+                    {{ form.natureza }}
+                </div>
+            </div>
+
+            <!-- Pergunta: DP de Apuração -->
+            <div class="form-group">
+                <label for="{{ form.dp_apuracao.id_for_label }}">DP de Apuração</label>
+                <div class="field">
+                    <select name="dp_apuracao" id="dp_apuracao">
+                        <option value="" selected>Selecione</option>
+                        <option value="Delegacia Especial de Atendimento À Mulher - Aracaju">Delegacia Especial de Atendimento À Mulher - Aracaju</option>
+                        <option value="Delegacia de Atendimento a Grupos Vulneráveis Barra Dos Coqueiros">Delegacia de Atendimento a Grupos Vulneráveis Barra Dos Coqueiros</option>
+                        <option value="Delegacia Especial de Atendimento a Grupos Vulneráveis Nossa Senhora do Socorro">Delegacia Especial de Atendimento a Grupos Vulneráveis Nossa Senhora do Socorro</option>
+                        <option value="Delegacia Especializada de Atendimento a Grupos Vulneráveis de São Cristóvão">Delegacia Especializada de Atendimento a Grupos Vulneráveis de São Cristóvão</option>
+                        <option value="Delegacia Especial de Atendimento À Grupos Vulneráveis Lagarto">Delegacia Especial de Atendimento À Grupos Vulneráveis Lagarto</option>
+                        <option value="Delegacia Especial de Atendimento À Grupos Vulneráveis Nossa Senhora da Glória">Delegacia Especial de Atendimento À Grupos Vulneráveis Nossa Senhora da Glória</option>
+                        <option value="Delegacia Especial de Atendimento À Grupos Vulneráveis Itabaiana">Delegacia Especial de Atendimento À Grupos Vulneráveis Itabaiana</option>
+                        <option value="Delegacia Especial de Atendimento À Grupos Vulneráveis Estância">Delegacia Especial de Atendimento À Grupos Vulneráveis Estância</option>
+                        <option value="Delegacia Regional de Itabaiana Aisp">Delegacia Regional de Itabaiana Aisp</option>
+                        <option value="Delegacia Regional de Lagarto Aisp">Delegacia Regional de Lagarto Aisp</option>
+                        <option value="Delegacia Regional de Estância Aisp">Delegacia Regional de Estância Aisp</option>
+                        <option value="Delegacia Regional de Propriá Aisp">Delegacia Regional de Propriá Aisp</option>
+                        <option value="Delegacia Regional de Tobias Barreto">Delegacia Regional de Tobias Barreto</option>
+                        <option value="Delegacia Regional de Maruim">Delegacia Regional de Maruim</option>
+                        <option value="Delegacia Regional de Neópolis">Delegacia Regional de Neópolis</option>
+                        <option value="Delegacia Regional de Nossa Senhora da Glória Aisp">Delegacia Regional de Nossa Senhora da Glória Aisp</option>
+                        <option value="Delegacia Regional de Carira">Delegacia Regional de Carira</option>
+                        <option value="Delegacia Regional de Carmópolis Aisp">Delegacia Regional de Carmópolis Aisp</option>
+                        <option value="Delegacia Regional de Nossa Senhora Das Dores Aisp">Delegacia Regional de Nossa Senhora Das Dores Aisp</option>
+                        <option value="DISTRITAL">DISTRITAL</option>
+                        <option value="MUNICIPAL">MUNICIPAL</option>
+                        <option value="Outra DP">Outra DP</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Pergunta: Data e Hora da Finalização -->
+            <div class="form-group">
+                <label for="{{ form.finalizacao_atendimento.id_for_label }}">Data e Hora da Finalização</label>
+                <div class="field">
+                    <input type="datetime-local" id="finalizacao_atendimento" name="finalizacao_atendimento" value="{{ form.finalizacao_atendimento.value|date:'Y-m-d\TH:i' }}">
+                </div>
+            </div>
+
+            <!-- Pergunta: Policial Responsável pela Finalização -->
+            <div class="form-group">
+                <label for="{{ form.policial_finalizacao.id_for_label }}">Policial Responsável pela Finalização</label>
+                <div class="field">
+                    <select name="policial_finalizacao" id="policial_finalizacao">
+                        <option value="" selected>Selecione</option>
+                        <option value="MARIA NAZARÉ">MARIA NAZARÉ</option>
+                        <option value="DANIELLA PORTO">DANIELLA PORTO</option>
+                        <option value="PAULA TIMBÓ">PAULA TIMBÓ</option>
+                        <option value="THAYSA ALBUQUERQUE">THAYSA ALBUQUERQUE</option>
+                        <option value="YASMIM CRISTINA">YASMIM CRISTINA</option>
+                        <option value="AMANDA NASCIMENTO">AMANDA NASCIMENTO</option>
+                        <option value="PAULA WILTSHIRE">PAULA WILTSHIRE</option>
+                        <option value="CARINA QUEIROZ">CARINA QUEIROZ</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Pergunta: Status da Fase -->
+            <div class="form-group">
+                <label for="{{ form.status_fase.id_for_label }}">Status da Fase</label>
+                <div class="field">
+                    <select name="status_fase" id="status_fase">
+                        <option value="" selected>Selecione</option>
+                        <option value="Em Andamento">Em Andamento</option>
+                        <option value="Concluída">Concluída</option>
+                        <option value="Desistência na Fase 1">Desistência na Fase 1</option>
+                        <option value="Falta de contato com a vítima">Falta de contato com a vítima</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Pergunta: Por Falta de Contato com a Vítima -->
+            <div class="form-group">
+                <label for="{{ form.falta_contato.id_for_label }}">Por Falta de Contato com a Vítima</label>
+                <div class="field">
+                    <select name="falta_contato" id="falta_contato">
+                        <option value="" selected>Selecione</option>
+                        <option value="Certificado e Encaminhado à Delegacia Responsável">Certificado e Encaminhado à Delegacia Responsável</option>
+                        <option value="Não se Aplica">Não se Aplica</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Pergunta: Vítima utilizou o Card de Violência Doméstica? -->
+            <div class="form-group">
+                <label for="{{ form.vitima_representou.id_for_label }}">Vítima utilizou o Card de Violência Doméstica?</label>
+                <div class="field">
+                    <select name="vitima_representou" id="vitima_representou">
+                        <option value="" selected>Selecione</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Pergunta: A vítima Representou Criminalmente? -->
+            <div class="form-group">
+                <label for="{{ form.vitima_rep_criminal.id_for_label }}">A vítima Representou Criminalmente?</label>
+                <div class="field">
+                    <select name="vitima_rep_criminal" id="vitima_rep_criminal">
+                        <option value="" selected>Selecione</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Pergunta: Caso Piloto -->
+            <div class="form-group">
+                <label for="{{ form.caso_piloto.id_for_label }}">Caso Piloto</label>
+                <div class="field">
+                    <select name="caso_piloto" id="caso_piloto">
+                        <option value="" selected>Selecione</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Pergunta: Observações -->
+            <div class="form-group">
+                <label for="{{ form.observacoes.id_for_label }}">Observações</label>
+                <div class="field">
+                    {{ form.observacoes }}
+                </div>
+            </div>
+
+            <!-- Container para anexar múltiplos documentos -->
+            <div class="form-group">
+                <label for="documentos">Anexar Documentos</label>
+                <div class="document-upload-container">
+                    <input type="file" name="documentos[]" accept="application/pdf, image/*" onchange="addDocument(this)">
+                </div>
+            </div>
+
+            <!-- Exibição dos documentos anexados -->
+            <div class="form-group">
+                <label for="documentos">Documentos Anexados</label>
+                <div class="document-container" id="documentos-container">
+                    <!-- Documentos anexados aparecerão aqui -->
+                </div>
+            </div>
+
+            <!-- Botão de Envio -->
+            <div class="form-group">
+                <button type="submit" class="submit-btn">Cadastrar Fase 1</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Botões fora do container -->
+    <div class="action-buttons">
+        <a href="https://drive.google.com/file/d/1IJWMJ80OzEjCDk1h6f6l3DX7wEyTl4Cd/view?usp=drive_link" target="_blank" class="button-link">Protocolo de Atendimento POLY</a>
+        <a href="https://delegaciavirtual.sinesp.gov.br/validacao/home" target="_blank" class="button-link">Módulo Validação - DEVIR</a>
+        <a href="https://web.whatsapp.com/" target="_blank" class="button-link">WhatsApp Web</a>
+        <a href="https://drive.google.com/drive/my-drive" target="_blank" class="button-link">Drive POLY</a>
+        <a href="https://www.policiacivil.se.gov.br/wp-content/uploads/2024/06/Video-Tutorial-MP-Devir8-1.mp4" target="_blank" class="button-link">Tutorial MPU DEVIR</a>
+        <a href="https://intranet.ssp.se.gov.br/SISTEMA/ConsultaIntegrada/" target="_blank" class="button-link">INTRANET - Levantamento das Partes</a>
+        <a href="https://portalbnmp.cnj.jus.br/" target="_blank" class="button-link">Conferir Mandado de Prisão</a>
+        <a href="https://seguranca.sinesp.gov.br/sinesp-seguranca/login.jsf?goto=INFOSEG" target="_blank" class="button-link">SINESP - INFOSEG</a>
+        <a href="https://sap.sejuc.se.gov.br/sap/acesso.php" target="_blank" class="button-link">SAP</a>
+        <a href="https://www.tjse.jus.br/portal/consultas/consulta-processual" target="_blank" class="button-link">TJ/SE - Processos Anteriores</a>
+        <a href="https://www.tjse.jus.br/controleacesso/paginas/loginTJSE.tjse" target="_blank" class="button-link">Portal Criminal TJ/SE</a>
+        <a href="https://seguranca.sinesp.gov.br/sinesp-seguranca/login.jsf?goto=Ppe" target="_blank" class="button-link">SINESP - PPF</a>
+    </div>
+
+    <!-- Botões de menu -->
+    <div class="button-container">
+        <!-- Botão para voltar ao menu principal -->
+        <a href="{% url 'Sistema_Poly:menu' %}" class="btn btn-primary">
+            <i class="fas fa-home"></i>
+        </a>
+
+        <!-- Botão para voltar ao menu de atendimento -->
+        <a href="{% url 'Sistema_Poly:sub_menu' %}?option=realizar_atendimento" class="btn btn-secondary">
+            <i class="fas fa-list-alt"></i>
+        </a>
+    </div>
+
+    <script>
+        // Máscara de CPF
+        function mascaraCPF(input) {
+            var value = input.value.replace(/\D/g, '');
+            input.value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+        }
+
+        // Máscara de Telefone
+        function mascaraTelefone(input) {
+            var value = input.value.replace(/\D/g, '');
+            input.value = value.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+        }
+
+        // Máscara de Protocolo
+        function mascaraProtocolo(input) {
+            var value = input.value.replace(/\D/g, '');
+            input.value = value.replace(/^(\d{4})(\d{10})(\d{1})$/, '$1/$2-$3');
+        }
+
+        function addDocument(input) {
+            const container = document.getElementById("documentos-container");
+            const file = input.files[0];
+
+            // Cria uma nova div para exibir o documento
+            const documentItem = document.createElement("div");
+            documentItem.classList.add("document-item");
+
+            // Exibe o nome do arquivo anexado
+            const fileName = document.createElement("span");
+            fileName.textContent = file.name;
+            documentItem.appendChild(fileName);
+
+            // Adiciona um ícone de balde de lixo para remover o documento
+            const removeButton = document.createElement("button");
+            removeButton.classList.add("remove-btn");
+            removeButton.innerHTML = '<i class="fas fa-trash-alt"></i>';  // Ícone de lixo
+            removeButton.onclick = function() {
+                documentItem.remove();
+            };
+            documentItem.appendChild(removeButton);
+
+            // Adiciona o documento à lista
+            container.appendChild(documentItem);
+        }
+    </script>
+</body>
+</html>
